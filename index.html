@@ -7,16 +7,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Modal animations */
-        .modal-enter { opacity: 0; pointer-events: none; }
-        .modal-enter-active { opacity: 1; pointer-events: auto; transition: opacity 0.3s ease; }
-        .modal-scale { transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .modal-enter-active .modal-scale { transform: scale(1); }
+        /* Smooth Portal Transitions */
+        #projectPortal {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .portal-closed {
+            transform: translateY(30px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .portal-open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="bg-[#0a0a0c] text-slate-200 overflow-x-hidden relative">
@@ -26,8 +35,8 @@
         <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/5 rounded-full blur-[120px]"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="relative max-w-6xl mx-auto px-6 py-20 flex flex-col items-center min-h-screen z-10">
+    <!-- MAIN HUB -->
+    <div id="mainHub" class="relative max-w-6xl mx-auto px-6 py-20 flex flex-col items-center min-h-screen z-10 transition-opacity duration-500">
         <!-- Header -->
         <div class="text-center mb-16">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-400 mb-6 shadow-lg">
@@ -35,17 +44,19 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
                 </span>
-                Latest Project, Flash Lite
+                Active Project, Flash Lite
             </div>
             <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-slate-200 to-slate-500 mb-4">
                 > ItsMeh1 < <span class="text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]">⚡</span>
             </h1>
-            <p class="text-lg text-slate-500 max-w-lg mx-auto">Hello there, I'm mostly a frontend dev. I like working with Github, Lua, Luau, Firebase, and Railway. So far, I've been working on a web-interception proxy named Flash which runs on Scramjet. I also like playing video games. Nothing more to say other than please don't abuse this website. thanks for viewing!</p>
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
+                Frontend developer specializing in GitHub, Lua, and Firebase. 
+                Currently building <span class="text-slate-300">Flash</span>, a web-interception proxy.
+            </p>
         </div>
 
-        <!-- Toolbar (Search + Proxy Toggle) -->
+        <!-- Toolbar -->
         <div class="w-full max-w-3xl flex flex-col md:flex-row items-center gap-4 mb-16 z-10">
-            <!-- Search Bar -->
             <div class="relative group flex-1 w-full">
                 <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-yellow-500 rounded-2xl opacity-20 group-hover:opacity-40 blur transition duration-500"></div>
                 <div class="relative flex items-center bg-[#16161a] border border-white/10 rounded-xl p-4 shadow-2xl">
@@ -54,8 +65,7 @@
                 </div>
             </div>
 
-            <!-- Proxy Toggle -->
-            <div class="flex items-center justify-between md:justify-center gap-4 bg-[#16161a] border border-white/10 rounded-xl p-4 shadow-2xl w-full md:w-auto shrink-0 transition-all duration-300 hover:border-white/20" id="proxyContainer">
+            <div class="flex items-center justify-between md:justify-center gap-4 bg-[#16161a] border border-white/10 rounded-xl p-4 shadow-2xl w-full md:w-auto shrink-0 transition-all duration-300" id="proxyContainer">
                 <div class="flex items-center gap-2">
                     <i data-lucide="shield" class="w-5 h-5 text-slate-500 transition-colors" id="proxyIcon"></i>
                     <span class="text-sm font-medium text-slate-300 select-none">Proxy Mode</span>
@@ -67,69 +77,91 @@
             </div>
         </div>
 
-        <!-- Dynamic Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl" id="appGrid">
-            <!-- Cards are injected here via JavaScript -->
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl" id="appGrid"></div>
     </div>
 
-    <!-- Details Modal -->
-    <div id="projectModal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4 sm:p-6">
-        <div class="absolute inset-0 bg-[#0a0a0c]/80 backdrop-blur-md" onclick="closeModal()"></div>
-        
-        <div class="modal-scale relative bg-[#121216] border border-white/10 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <!-- Decorative header background -->
-            <div class="h-32 w-full bg-gradient-to-br from-white/5 to-transparent absolute top-0 left-0 pointer-events-none"></div>
-            
-            <div class="p-8 relative z-10 flex-1 overflow-y-auto no-scrollbar">
-                <button onclick="closeModal()" class="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+    <!-- PROJECT PORTAL (Specific Detailed Page) -->
+    <div id="projectPortal" class="fixed inset-0 z-[100] portal-closed bg-[#0a0a0c] overflow-y-auto no-scrollbar">
+        <!-- Floating Navigation -->
+        <div class="sticky top-0 z-[110] p-6 flex justify-between items-center bg-[#0a0a0c]/90 backdrop-blur-xl border-b border-white/5">
+            <button onclick="closePortal()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition-all font-semibold">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Hub
+            </button>
+            <div id="portalProxyStatus" class="hidden sm:flex items-center gap-2 text-[10px] font-black text-yellow-500 bg-yellow-500/10 px-3 py-1.5 rounded-full border border-yellow-500/20 tracking-widest">
+                <i data-lucide="shield-check" class="w-3 h-3"></i> PROXY AVAILABLE
+            </div>
+        </div>
 
-                <div class="flex items-start gap-6 mb-8">
-                    <div id="modalIconContainer" class="w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shrink-0 shadow-lg">
-                        <i id="modalIcon" data-lucide="globe" class="w-10 h-10"></i>
-                    </div>
-                    <div class="pt-1">
-                        <div id="modalBadge" class="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest mb-3 border">
-                            STATUS
-                        </div>
-                        <h2 id="modalTitle" class="text-3xl font-black text-white tracking-tight mb-2">Project Name</h2>
-                        <p id="modalShort" class="text-slate-400 font-medium">Short description goes here.</p>
-                    </div>
+        <div class="max-w-5xl mx-auto px-6 py-12">
+            <!-- Project Header -->
+            <div class="flex flex-col md:flex-row items-start gap-8 mb-16">
+                <div id="portalIconContainer" class="w-24 h-24 rounded-3xl flex items-center justify-center border border-white/10 shrink-0 shadow-2xl">
+                    <i id="portalIcon" data-lucide="globe" class="w-12 h-12"></i>
                 </div>
-
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">About the Project</h3>
-                        <p id="modalLong" class="text-slate-300 leading-relaxed text-sm/7">
-                            Long description goes here.
-                        </p>
-                    </div>
+                <div class="space-y-4">
+                    <div id="portalTag" class="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-[0.2em] border">STATUS</div>
+                    <h2 id="portalTitle" class="text-5xl md:text-6xl font-black text-white tracking-tighter">Project Name</h2>
+                    <p id="portalShortDesc" class="text-xl text-slate-400 max-w-2xl font-medium">Tagline for the project.</p>
                 </div>
             </div>
-            
-            <div class="p-6 border-t border-white/5 bg-black/20 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
-                <div id="modalProxyStatus" class="text-xs font-medium text-slate-500 flex items-center gap-1 opacity-0 transition-opacity">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-yellow-500"></i> Proxy Mode Active
+
+            <!-- Page Sections -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Info -->
+                <div class="lg:col-span-2 space-y-10">
+                    <section>
+                        <h3 class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">
+                            <i data-lucide="info" class="w-4 h-4"></i> Overview
+                        </h3>
+                        <p id="portalLongDesc" class="text-slate-300 leading-relaxed text-lg">Detailed description of the project goes here.</p>
+                    </section>
+
+                    <section id="featuresSection">
+                        <h3 class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">
+                            <i data-lucide="layers" class="w-4 h-4"></i> Core Features
+                        </h3>
+                        <div id="portalFeatures" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Injected Features -->
+                        </div>
+                    </section>
                 </div>
-                <div class="flex justify-end gap-3 w-full sm:w-auto">
-                    <button onclick="closeModal()" class="px-6 py-3 rounded-xl font-bold text-sm text-slate-300 hover:text-white hover:bg-white/5 transition-colors w-full sm:w-auto">
-                        Close
-                    </button>
-                    <a id="modalLaunchBtn" href="#" target="_blank" class="flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold text-sm bg-white text-black hover:bg-slate-200 transition-colors w-full sm:w-auto">
-                        Launch Experience <i data-lucide="external-link" class="w-4 h-4"></i>
-                    </a>
+
+                <!-- Sidebar: Links & Runtime -->
+                <div class="space-y-8">
+                    <!-- Actions -->
+                    <div class="bg-[#121216] border border-white/10 rounded-2xl p-6 space-y-4">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Launch</h3>
+                        <a id="portalLaunchBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full py-4 rounded-xl bg-white text-black font-black text-sm hover:scale-[1.02] transition-transform">
+                            Open Experience <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                        <p class="text-[10px] text-center text-slate-600 font-medium">Verify connection before launching.</p>
+                    </div>
+
+                    <!-- Runtime Specs -->
+                    <div class="bg-[#121216] border border-white/10 rounded-2xl p-6">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Runtime Specs</h3>
+                        <div class="space-y-4" id="portalRuntime">
+                            <!-- Injected Runtime data -->
+                        </div>
+                    </div>
+
+                    <!-- Repository Info -->
+                    <div class="bg-[#121216] border border-white/10 rounded-2xl p-6">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Source</h3>
+                        <div class="flex items-center justify-between group">
+                            <span class="text-sm text-slate-400 font-medium">GitHub Repository</span>
+                            <i data-lucide="github" class="w-5 h-5 text-slate-500 group-hover:text-white transition-colors"></i>
+                        </div>
+                        <div id="portalRepo" class="mt-2 text-xs text-blue-400 font-mono truncate">Loading...</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Global State
         let isProxyMode = false;
 
-        // Project Data Configuration
         const projects = [
             {
                 id: 'lite',
@@ -140,80 +172,75 @@
                 iconColor: 'text-blue-400',
                 iconBg: 'bg-blue-500/10',
                 shortDesc: 'New. Fast. Lightweight. Version 6.3.',
-                longDesc: 'Flash Lite is the newest version of the Flash lineup. Flash Lite is a work-in-progress, extremely quick and light-weight simple web-interception browser. Expect heavy updates, frequent patches, and bugs..',
+                longDesc: 'Flash Lite is the newest version of the Flash lineup. Built for speed, it utilizes a lightweight Scramjet integration to provide seamless web interception. Expect heavy updates and frequent patches as we refine the stealth engine.',
                 link: 'https://itsmeh1.github.io/Flash-Lite',
+                repo: 'itsmeh1/Flash-Lite',
+                features: ['Lightweight search engine', 'Minimalist UI', 'Instant-on capability', 'Low data intake'],
+                runtime: { engine: 'Scramjet', version: '6.3.0', latency: '< 50ms', environment: 'GitHub' },
                 isAvailable: true
             },
             {
                 id: 'legacy',
                 title: 'Flash Legacy',
-                tag: "THAT'S A WRAP",
+                tag: "ARCHIVED",
                 tagStyle: 'text-rose-400 bg-rose-400/10 border-rose-400/20',
                 icon: 'archive',
                 iconColor: 'text-slate-400',
                 iconBg: 'bg-slate-500/10',
-                shortDesc: "Older version of Flash, not all links work. Isn't old gold?",
-                longDesc: 'Flash Legacy, the original version of Flash. Legacy will not be receiving anymore maintanance updates, nor will most of the embedded functionality will work. Legacy is archived.',
+                shortDesc: "Older version of Flash, archived but stable.",
+                longDesc: 'Flash Legacy represents the original vision of the project. While it is no longer receiving maintenance or new features, it remains a testament to the growth of the platform. Most embedded functionality is locked or disabled.',
                 link: 'https://itsmeh1.github.io/Flash-Legacy',
+                repo: 'itsmeh1/Flash-Legacy',
+                features: ['Legacy Proxy Engine', 'Original Design', 'Historical Build', 'Unfiltered Access'],
+                runtime: { engine: 'Classic Proxy', version: '1.0.0', latency: 'Variable', environment: 'Static' },
                 isAvailable: true
             },
             {
                 id: 'plus',
                 title: 'Flash+',
-                tag: 'INDEV',
-                tagStyle: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
+                tag: 'PRIVATE',
+                tagStyle: 'text-purple-400 bg-purple-400/10 border-purple-400/20',
                 icon: 'sparkles',
                 iconColor: 'text-purple-400',
                 iconBg: 'bg-purple-500/10',
-                shortDesc: 'Private. Fast. Reliable. That\'s Flash+.',
-                longDesc: 'The ultimate premium stealth experience. Flash+ brings advanced unblocking capabilities, higher connection speeds, seamless tab management, and exclusive features not found in Lite or Legacy. Currently a Work In Progress (WIP) and not yet available to the public.',
+                shortDesc: 'Premium unblocking experience. Fast & Reliable.',
+                longDesc: 'The ultimate stealth tool. Flash+ is currently in a closed beta. It features multi-tab support, custom proxy configurations, and advanced Cloak tech to avoid detection by enterprise firewalls.',
                 link: '#',
+                repo: 'itsmeh1/Flash-Plus',
+                features: ['Advanced Scramjet Engine', 'Multi-tab support', 'Dedicated Support', 'Custom User-Agents'],
+                runtime: { engine: 'Pro Engine', version: 'BETA 1.0', latency: '< 20ms', environment: 'Railway' },
                 isAvailable: false
             }
         ];
 
-        // Update Proxy Toggle State
         function updateProxyState(checkbox) {
             isProxyMode = checkbox.checked;
             const icon = document.getElementById('proxyIcon');
             const container = document.getElementById('proxyContainer');
-            
             if(isProxyMode) {
-                icon.classList.remove('text-slate-500');
-                icon.classList.add('text-yellow-400');
-                container.classList.add('border-yellow-500/30', 'shadow-[0_0_20px_rgba(250,204,21,0.1)]');
-                container.classList.remove('border-white/10');
+                icon.classList.replace('text-slate-500', 'text-yellow-400');
+                container.classList.add('border-yellow-500/30', 'shadow-2xl');
             } else {
-                icon.classList.add('text-slate-500');
-                icon.classList.remove('text-yellow-400');
-                container.classList.remove('border-yellow-500/30', 'shadow-[0_0_20px_rgba(250,204,21,0.1)]');
-                container.classList.add('border-white/10');
+                icon.classList.replace('text-yellow-400', 'text-slate-500');
+                container.classList.remove('border-yellow-500/30', 'shadow-2xl');
             }
         }
 
-        // Render Cards to the DOM
         function renderCards() {
             const grid = document.getElementById('appGrid');
             grid.innerHTML = '';
-
             projects.forEach(proj => {
                 const card = document.createElement('div');
                 card.className = 'app-card group relative bg-[#16161a] border border-white/5 rounded-2xl p-6 hover:border-white/20 hover:bg-[#1c1c21] transition-all duration-300 hover:-translate-y-1 cursor-pointer';
-                card.onclick = () => openModal(proj.id);
-                
+                card.onclick = () => openPortal(proj.id);
                 card.innerHTML = `
                     <div class="relative flex items-start gap-5">
-                        <div class="w-16 h-16 rounded-xl ${proj.iconBg} flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform shrink-0">
+                        <div class="w-16 h-16 rounded-xl ${proj.iconBg} flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform">
                             <i data-lucide="${proj.icon}" class="${proj.iconColor} w-8 h-8"></i>
                         </div>
-                        <div class="flex-1 pt-1 min-w-0">
-                            <div class="flex flex-col mb-2">
-                                <span class="${proj.tagStyle} self-start text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider mb-2">${proj.tag}</span>
-                                <div class="flex items-center justify-between">
-                                    <h3 class="text-xl font-bold text-white group-hover:text-white truncate pr-2">${proj.title}</h3>
-                                    <i data-lucide="maximize-2" class="text-slate-600 w-4 h-4 group-hover:text-slate-300 transition-colors shrink-0"></i>
-                                </div>
-                            </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="${proj.tagStyle} self-start text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-wider mb-2 block w-fit">${proj.tag}</span>
+                            <h3 class="text-xl font-bold text-white mb-1">${proj.title}</h3>
                             <p class="text-sm text-slate-500 line-clamp-2">${proj.shortDesc}</p>
                         </div>
                     </div>
@@ -223,91 +250,84 @@
             lucide.createIcons();
         }
 
-        // Search Filter
         function filterApps() {
             const query = document.getElementById('siteSearch').value.toLowerCase();
             const cards = document.querySelectorAll('.app-card');
             cards.forEach((card, index) => {
                 const title = projects[index].title.toLowerCase();
-                const desc = projects[index].shortDesc.toLowerCase();
-                if (title.includes(query) || desc.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                if (title.includes(query)) card.style.display = 'block';
+                else card.style.display = 'none';
             });
         }
 
-        // Modal Logic
-        const modal = document.getElementById('projectModal');
-        
-        function openModal(projectId) {
+        function openPortal(projectId) {
             const project = projects.find(p => p.id === projectId);
             if(!project) return;
 
-            // Populate Modal Data
-            document.getElementById('modalTitle').textContent = project.title;
-            document.getElementById('modalShort').textContent = project.shortDesc;
-            document.getElementById('modalLong').textContent = project.longDesc;
+            // Fill Data
+            document.getElementById('portalTitle').innerText = project.title;
+            document.getElementById('portalShortDesc').innerText = project.shortDesc;
+            document.getElementById('portalLongDesc').innerText = project.longDesc;
+            document.getElementById('portalRepo').innerText = project.repo;
             
-            const badge = document.getElementById('modalBadge');
-            badge.textContent = project.tag;
-            badge.className = `inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest mb-3 border ${project.tagStyle}`;
+            const tag = document.getElementById('portalTag');
+            tag.innerText = project.tag;
+            tag.className = `inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-[0.2em] border ${project.tagStyle}`;
 
-            const iconContainer = document.getElementById('modalIconContainer');
-            iconContainer.className = `w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shrink-0 shadow-lg ${project.iconBg}`;
-            
-            // Re-render icon
-            iconContainer.innerHTML = `<i data-lucide="${project.icon}" class="${project.iconColor} w-10 h-10"></i>`;
-            
-            // Proxy Status Indicator
-            const proxyStatus = document.getElementById('modalProxyStatus');
-            if (isProxyMode && project.isAvailable) {
-                proxyStatus.classList.remove('opacity-0');
-            } else {
-                proxyStatus.classList.add('opacity-0');
-            }
+            const iconContainer = document.getElementById('portalIconContainer');
+            iconContainer.className = `w-24 h-24 rounded-3xl flex items-center justify-center border border-white/10 shrink-0 shadow-2xl ${project.iconBg}`;
+            iconContainer.innerHTML = `<i data-lucide="${project.icon}" class="${project.iconColor} w-12 h-12"></i>`;
 
-            // Button Logic
-            const btn = document.getElementById('modalLaunchBtn');
+            // Render Features
+            const featuresBox = document.getElementById('portalFeatures');
+            featuresBox.innerHTML = project.features.map(f => `
+                <div class="flex items-center gap-3 p-4 bg-white/5 border border-white/5 rounded-xl">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i>
+                    <span class="text-sm text-slate-400 font-medium">${f}</span>
+                </div>
+            `).join('');
+
+            // Render Runtime
+            const runtimeBox = document.getElementById('portalRuntime');
+            runtimeBox.innerHTML = Object.entries(project.runtime).map(([key, value]) => `
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-slate-500 capitalize">${key}</span>
+                    <span class="text-slate-300 font-mono">${value}</span>
+                </div>
+            `).join('');
+
+            // Launch Button Logic
+            const btn = document.getElementById('portalLaunchBtn');
+            const proxyLabel = document.getElementById('portalProxyStatus');
+            
             if (project.isAvailable) {
-                // Determine final link based on Proxy Mode state
                 const finalLink = isProxyMode ? project.link + '/?.cnn.com' : project.link;
-                
                 btn.href = finalLink;
-                btn.className = "flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold text-sm bg-white text-black hover:bg-slate-200 transition-colors w-full sm:w-auto cursor-pointer";
+                btn.className = "flex items-center justify-center gap-3 w-full py-4 rounded-xl bg-white text-black font-black text-sm hover:scale-[1.02] transition-transform";
                 btn.innerHTML = `Launch Experience <i data-lucide="external-link" class="w-4 h-4"></i>`;
-                btn.onclick = null; // Remove prevent default if it exists
+                if(isProxyMode) proxyLabel.classList.remove('hidden');
+                else proxyLabel.classList.add('hidden');
             } else {
                 btn.href = "#";
-                btn.className = "flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold text-sm bg-white/10 text-slate-400 border border-white/10 cursor-not-allowed w-full sm:w-auto";
-                btn.innerHTML = `Currently Unavailable <i data-lucide="lock" class="w-4 h-4"></i>`;
-                btn.onclick = (e) => e.preventDefault(); // Prevent linking
+                btn.className = "flex items-center justify-center gap-3 w-full py-4 rounded-xl bg-white/5 text-slate-500 font-black text-sm cursor-not-allowed border border-white/5";
+                btn.innerHTML = `Access Locked <i data-lucide="lock" class="w-4 h-4"></i>`;
+                proxyLabel.classList.add('hidden');
             }
-            
-            lucide.createIcons({ root: modal });
 
-            // Show Modal
-            modal.classList.add('modal-enter-active');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            // Animation
+            const portal = document.getElementById('projectPortal');
+            portal.classList.replace('portal-closed', 'portal-open');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons({ root: portal });
         }
 
-        function closeModal() {
-            modal.classList.remove('modal-enter-active');
+        function closePortal() {
+            const portal = document.getElementById('projectPortal');
+            portal.classList.replace('portal-open', 'portal-closed');
             document.body.style.overflow = '';
         }
 
-        // Close modal on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('modal-enter-active')) {
-                closeModal();
-            }
-        });
-
-        // Initialize
-        window.onload = () => {
-            renderCards();
-        };
+        window.onload = renderCards;
     </script>
 </body>
 </html>
