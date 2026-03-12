@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> > ItsMeh1 < </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Modal animations */
+        .modal-enter { opacity: 0; pointer-events: none; }
+        .modal-enter-active { opacity: 1; pointer-events: auto; transition: opacity 0.3s ease; }
+        .modal-scale { transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-enter-active .modal-scale { transform: scale(1); }
+    </style>
+</head>
+<body class="bg-[#0a0a0c] text-slate-200 overflow-x-hidden relative">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/5 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="relative max-w-6xl mx-auto px-6 py-20 flex flex-col items-center min-h-screen z-10">
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-400 mb-6 shadow-lg">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
+                </span>
+                Latest Project, Flash Lite
+            </div>
+            <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-slate-200 to-slate-500 mb-4">
+                > ItsMeh1 < <span class="text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]">⚡</span>
+            </h1>
+            <p class="text-lg text-slate-500 max-w-lg mx-auto">Hello there, I'm mostly a frontend dev. I like working with Github, Lua, Luau, Firebase, and Railway. So far, I've been working on a web-interception proxy named Flash which runs on Scramjet. I also like playing video games. Nothing more to say other than please don't abuse this website. thanks for viewing!</p>
+        </div>
+
+        <!-- Toolbar (Search + Proxy Toggle) -->
+        <div class="w-full max-w-3xl flex flex-col md:flex-row items-center gap-4 mb-16 z-10">
+            <!-- Search Bar -->
+            <div class="relative group flex-1 w-full">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-yellow-500 rounded-2xl opacity-20 group-hover:opacity-40 blur transition duration-500"></div>
+                <div class="relative flex items-center bg-[#16161a] border border-white/10 rounded-xl p-4 shadow-2xl">
+                    <i data-lucide="search" class="text-slate-500 ml-2 mr-4 w-5 h-5"></i>
+                    <input type="text" id="siteSearch" placeholder="Search experiences..." class="w-full bg-transparent text-lg placeholder:text-slate-600 focus:outline-none text-white" onkeyup="filterApps()">
+                </div>
+            </div>
+
+            <!-- Proxy Toggle -->
+            <div class="flex items-center justify-between md:justify-center gap-4 bg-[#16161a] border border-white/10 rounded-xl p-4 shadow-2xl w-full md:w-auto shrink-0 transition-all duration-300 hover:border-white/20" id="proxyContainer">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield" class="w-5 h-5 text-slate-500 transition-colors" id="proxyIcon"></i>
+                    <span class="text-sm font-medium text-slate-300 select-none">Proxy Mode</span>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="proxyToggle" class="sr-only peer" onchange="updateProxyState(this)">
+                    <div class="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500/80 peer-checked:after:bg-white border border-white/5 transition-colors"></div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Dynamic Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl" id="appGrid">
+            <!-- Cards are injected here via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id="projectModal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4 sm:p-6">
+        <div class="absolute inset-0 bg-[#0a0a0c]/80 backdrop-blur-md" onclick="closeModal()"></div>
+        
+        <div class="modal-scale relative bg-[#121216] border border-white/10 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <!-- Decorative header background -->
+            <div class="h-32 w-full bg-gradient-to-br from-white/5 to-transparent absolute top-0 left-0 pointer-events-none"></div>
+            
+            <div class="p-8 relative z-10 flex-1 overflow-y-auto no-scrollbar">
+                <button onclick="closeModal()" class="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+
+                <div class="flex items-start gap-6 mb-8">
+                    <div id="modalIconContainer" class="w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shrink-0 shadow-lg">
+                        <i id="modalIcon" data-lucide="globe" class="w-10 h-10"></i>
+                    </div>
+                    <div class="pt-1">
+                        <div id="modalBadge" class="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest mb-3 border">
+                            STATUS
+                        </div>
+                        <h2 id="modalTitle" class="text-3xl font-black text-white tracking-tight mb-2">Project Name</h2>
+                        <p id="modalShort" class="text-slate-400 font-medium">Short description goes here.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">About the Project</h3>
+                        <p id="modalLong" class="text-slate-300 leading-relaxed text-sm/7">
+                            Long description goes here.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6 border-t border-white/5 bg-black/20 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
+                <div id="modalProxyStatus" class="text-xs font-medium text-slate-500 flex items-center gap-1 opacity-0 transition-opacity">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-yellow-500"></i> Proxy Mode Active
+                </div>
+                <div class="flex justify-end gap-3 w-full sm:w-auto">
+                    <button onclick="closeModal()" class="px-6 py-3 rounded-xl font-bold text-sm text-slate-300 hover:text-white hover:bg-white/5 transition-colors w-full sm:w-auto">
+                        Close
+                    </button>
+                    <a id="modalLaunchBtn" href="#" target="_blank" class="flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold text-sm bg-white text-black hover:bg-slate-200 transition-colors w-full sm:w-auto">
+                        Launch Experience <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global State
+        let isProxyMode = false;
+
+        // Project Data Configuration
+        const projects = [
+            {
+                id: 'lite',
+                title: 'Flash Lite',
+                tag: 'INDEV',
+                tagStyle: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
+                icon: 'zap',
+                iconColor: 'text-blue-400',
+                iconBg: 'bg-blue-500/10',
+                shortDesc: 'New. Fast. Lightweight. Version 6.3.',
+                longDesc: 'Flash Lite is the newest version of the Flash lineup. Flash Lite is a work-in-progress, extremely quick and light-weight simple web-interception browser. Expect heavy updates, frequent patches, and bugs..',
+                link: 'https://itsmeh1.github.io/Flash-Lite',
+                isAvailable: true
+            },
+            {
+                id: 'legacy',
+                title: 'Flash Legacy',
+                tag: "THAT'S A WRAP",
+                tagStyle: 'text-rose-400 bg-rose-400/10 border-rose-400/20',
+                icon: 'archive',
+                iconColor: 'text-slate-400',
+                iconBg: 'bg-slate-500/10',
+                shortDesc: "Older version of Flash, not all links work. Isn't old gold?",
+                longDesc: 'Flash Legacy, the original version of Flash. Legacy will not be receiving anymore maintanance updates, nor will most of the embedded functionality will work. Legacy is archived.',
+                link: 'https://itsmeh1.github.io/Flash-Legacy',
+                isAvailable: true
+            },
+            {
+                id: 'plus',
+                title: 'Flash+',
+                tag: 'INDEV',
+                tagStyle: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
+                icon: 'sparkles',
+                iconColor: 'text-purple-400',
+                iconBg: 'bg-purple-500/10',
+                shortDesc: 'Private. Fast. Reliable. That\'s Flash+.',
+                longDesc: 'The ultimate premium stealth experience. Flash+ brings advanced unblocking capabilities, higher connection speeds, seamless tab management, and exclusive features not found in Lite or Legacy. Currently a Work In Progress (WIP) and not yet available to the public.',
+                link: '#',
+                isAvailable: false
+            }
+        ];
+
+        // Update Proxy Toggle State
+        function updateProxyState(checkbox) {
+            isProxyMode = checkbox.checked;
+            const icon = document.getElementById('proxyIcon');
+            const container = document.getElementById('proxyContainer');
+            
+            if(isProxyMode) {
+                icon.classList.remove('text-slate-500');
+                icon.classList.add('text-yellow-400');
+                container.classList.add('border-yellow-500/30', 'shadow-[0_0_20px_rgba(250,204,21,0.1)]');
+                container.classList.remove('border-white/10');
+            } else {
+                icon.classList.add('text-slate-500');
+                icon.classList.remove('text-yellow-400');
+                container.classList.remove('border-yellow-500/30', 'shadow-[0_0_20px_rgba(250,204,21,0.1)]');
+                container.classList.add('border-white/10');
+            }
+        }
+
+        // Render Cards to the DOM
+        function renderCards() {
+            const grid = document.getElementById('appGrid');
+            grid.innerHTML = '';
+
+            projects.forEach(proj => {
+                const card = document.createElement('div');
+                card.className = 'app-card group relative bg-[#16161a] border border-white/5 rounded-2xl p-6 hover:border-white/20 hover:bg-[#1c1c21] transition-all duration-300 hover:-translate-y-1 cursor-pointer';
+                card.onclick = () => openModal(proj.id);
+                
+                card.innerHTML = `
+                    <div class="relative flex items-start gap-5">
+                        <div class="w-16 h-16 rounded-xl ${proj.iconBg} flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform shrink-0">
+                            <i data-lucide="${proj.icon}" class="${proj.iconColor} w-8 h-8"></i>
+                        </div>
+                        <div class="flex-1 pt-1 min-w-0">
+                            <div class="flex flex-col mb-2">
+                                <span class="${proj.tagStyle} self-start text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider mb-2">${proj.tag}</span>
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-xl font-bold text-white group-hover:text-white truncate pr-2">${proj.title}</h3>
+                                    <i data-lucide="maximize-2" class="text-slate-600 w-4 h-4 group-hover:text-slate-300 transition-colors shrink-0"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-500 line-clamp-2">${proj.shortDesc}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Search Filter
+        function filterApps() {
+            const query = document.getElementById('siteSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.app-card');
+            cards.forEach((card, index) => {
+                const title = projects[index].title.toLowerCase();
+                const desc = projects[index].shortDesc.toLowerCase();
+                if (title.includes(query) || desc.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('projectModal');
+        
+        function openModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if(!project) return;
+
+            // Populate Modal Data
+            document.getElementById('modalTitle').textContent = project.title;
+            document.getElementById('modalShort').textContent = project.shortDesc;
+            document.getElementById('modalLong').textContent = project.longDesc;
+            
+            const badge = document.getElementById('modalBadge');
+            badge.textContent = project.tag;
+            badge.className = `inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest mb-3 border ${project.tagStyle}`;
+
+            const iconContainer = document.getElementById('modalIconContainer');
+            iconContainer.className = `w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shrink-0 shadow-lg ${project.iconBg}`;
+            
+            // Re-render icon
+            iconContainer.innerHTML = `<i data-lucide="${project.icon}" class="${project.iconColor} w-10 h-10"></i>`;
+            
+            // Proxy Status Indicator
+            const proxyStatus = document.getElementById('modalProxyStatus');
+            if (isProxyMode && project.isAvailable) {
+                proxyStatus.classList.remove('opacity-0');
+            } else {
+                proxyStatus.classList.add('opacity-0');
+            }
+
+            // Button Logic
+            const btn = document.getElementById('modalLaunchBtn');
+            if (project.isAvailable) {
+                // Determine final link based on Proxy Mode state
+                const finalLink = isProxyMode ? project.link + '/?.cnn.com' : project.link;
+                
+                btn.href = finalLink;
+                btn.className = "flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold text-sm bg-white text-black hover:bg-slate-200 transition-colors w-full sm:w-auto cursor-pointer";
+                btn.innerHTML = `Launch Experience <i data-lucide="external-link" class="w-4 h-4"></i>`;
+                btn.onclick = null; // Remove prevent default if it exists
+            } else {
+                btn.href = "#";
+                btn.className = "flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold text-sm bg-white/10 text-slate-400 border border-white/10 cursor-not-allowed w-full sm:w-auto";
+                btn.innerHTML = `Currently Unavailable <i data-lucide="lock" class="w-4 h-4"></i>`;
+                btn.onclick = (e) => e.preventDefault(); // Prevent linking
+            }
+            
+            lucide.createIcons({ root: modal });
+
+            // Show Modal
+            modal.classList.add('modal-enter-active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            modal.classList.remove('modal-enter-active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('modal-enter-active')) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        window.onload = () => {
+            renderCards();
+        };
+    </script>
+</body>
+</html>
