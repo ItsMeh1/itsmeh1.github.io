@@ -7,13 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Syncopate:wght@700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Smooth Portal Transitions */
-        #projectPortal {
+        #projectPortal, #gameLauncherPortal {
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
         .portal-closed {
@@ -27,7 +26,6 @@
             pointer-events: auto;
         }
 
-        /* Glassmorphism effects */
         .glass {
             background: rgba(22, 22, 26, 0.7);
             backdrop-filter: blur(12px);
@@ -39,12 +37,12 @@
             box-shadow: 0 0 20px rgba(234, 179, 8, 0.05);
         }
 
-        select option {
-            background: #16161a;
-            color: #cbd5e1;
+        .category-pill.active {
+            background: #facc15 !important;
+            color: #000 !important;
+            border-color: #facc15 !important;
         }
 
-        /* Prevent layout shift */
         #prefixSelectorContainer {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             max-width: 0;
@@ -70,26 +68,24 @@
 
     <!-- MAIN HUB -->
     <div id="mainHub" class="relative max-w-6xl mx-auto px-6 py-20 flex flex-col items-center min-h-screen z-10 transition-opacity duration-500">
-        <!-- Header -->
         <div class="text-center mb-12">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-400 mb-6 shadow-lg backdrop-blur-md">
                 <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
                 </span>
-                Only 1 Offline Project!
+                Active Development: Flash Ecosystem
             </div>
             <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-500 mb-4">
                 ItsMeh1 <span class="text-yellow-400">⚡</span>
             </h1>
             <p class="text-slate-400 max-w-xl mx-auto leading-relaxed">
-                Building <span class="text-white font-semibold">Flash</span>: The high-performance web-interception suite.
+                Building <span class="text-white font-semibold">Flash+</span>: The high-performance web-interception suite and gaming gallery. Coming Late 2026.
             </p>
         </div>
 
-        <!-- Unified Command Bar -->
+        <!-- Command Bar -->
         <div class="w-full max-w-4xl flex flex-col md:flex-row items-stretch gap-3 mb-16 z-10">
-            <!-- Search Bar -->
             <div class="relative flex-1">
                 <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                     <i data-lucide="search" class="text-slate-500 w-5 h-5"></i>
@@ -99,14 +95,11 @@
                     onkeyup="filterApps()">
             </div>
 
-            <!-- Compact Proxy Controller -->
             <div class="flex items-center glass rounded-2xl p-2 px-3 shadow-xl border border-white/10 shrink-0" id="proxyContainer">
                 <div class="flex items-center gap-2 pr-3 border-r border-white/5">
                     <i data-lucide="shield" class="w-4 h-4 text-slate-500 transition-all" id="proxyIcon"></i>
                     <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Proxy</span>
                 </div>
-
-                <!-- Animated Prefix Selector -->
                 <div id="prefixSelectorContainer" class="overflow-hidden">
                     <select id="proxyPrefix" class="bg-white/5 border border-white/10 rounded-lg py-1.5 px-2 text-[11px] text-slate-300 focus:outline-none transition-colors cursor-pointer w-32" onchange="saveSelection()">
                         <option value="/?.cnn.com">CNN Cloak</option>
@@ -115,7 +108,6 @@
                         <option value="/?.wikipedia.org">Wiki</option>
                     </select>
                 </div>
-
                 <label class="relative inline-flex items-center cursor-pointer ml-2">
                     <input type="checkbox" id="proxyToggle" class="sr-only peer" onchange="updateProxyState(this)">
                     <div class="w-10 h-5 bg-white/10 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-yellow-500 peer-checked:after:bg-white transition-all"></div>
@@ -136,66 +128,43 @@
                 <i data-lucide="shield-check" class="w-4 h-4"></i> TUNNEL: <span id="activePrefixDisplay" class="text-white">NONE</span>
             </div>
         </div>
+        <div class="max-w-5xl mx-auto px-6 py-12" id="portalContent"></div>
+    </div>
 
-        <div class="max-w-5xl mx-auto px-6 py-12">
-            <div class="flex flex-col md:flex-row items-start gap-8 mb-16">
-                <div id="portalIconContainer" class="w-24 h-24 rounded-3xl flex items-center justify-center border border-white/10 shrink-0 shadow-2xl relative">
-                    <i id="portalIcon" data-lucide="globe" class="w-12 h-12 relative z-10"></i>
-                </div>
-                <div class="space-y-4">
-                    <div id="portalTag" class="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest border">STATUS</div>
-                    <h2 id="portalTitle" class="text-5xl md:text-6xl font-black text-white tracking-tighter">Project Name</h2>
-                    <p id="portalShortDesc" class="text-lg text-slate-400 font-medium"></p>
-                </div>
+    <!-- GAME LAUNCHER PORTAL -->
+    <div id="gameLauncherPortal" class="fixed inset-0 z-[120] portal-closed bg-[#050507] overflow-y-auto no-scrollbar">
+        <div class="sticky top-0 z-40 bg-black/80 backdrop-blur-xl px-8 py-5 border-b border-white/5 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="closeGameLauncher()" class="p-2 bg-white/5 rounded-xl text-slate-400 mr-2 hover:bg-white/10"><i data-lucide="arrow-left"></i></button>
+                <h1 class="text-xl font-black italic uppercase tracking-tighter">Gamz <span class="text-yellow-400">LaunchR</span></h1>
             </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 space-y-10">
-                    <section class="glass p-8 rounded-3xl">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Overview</h3>
-                        <p id="portalLongDesc" class="text-slate-300 leading-relaxed text-lg"></p>
-                    </section>
-                    <section>
-                        <div id="portalFeatures" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-                    </section>
-                </div>
-
-                <div class="space-y-6">
-                    <div class="bg-[#121216] border border-white/10 rounded-3xl p-6 space-y-4 shadow-xl">
-                        <a id="portalLaunchBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-white text-black font-black text-sm hover:scale-[1.02] active:scale-95 transition-all">
-                            Initialize <i data-lucide="external-link" class="w-4 h-4"></i>
-                        </a>
-                    </div>
-                    <div class="bg-[#121216] border border-white/10 rounded-3xl p-6 shadow-xl">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Runtime Specs</h3>
-                        <div class="space-y-3" id="portalRuntime"></div>
-                    </div>
-                </div>
+            <div class="flex gap-4" id="launcherCategories">
+                <button onclick="filterCategory('All')" class="category-pill active px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border border-white/10">All</button>
+                <button onclick="filterCategory('Multiplayer')" class="category-pill px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border border-white/10">Multi</button>
+                <button onclick="filterCategory('Retro')" class="category-pill px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border border-white/10">Retro</button>
+                <button onclick="filterCategory('Action')" class="category-pill px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border border-white/10">Action</button>
             </div>
         </div>
+        <div class="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="launcherGrid"></div>
+    </div>
+
+    <!-- GAME VIEWPORT -->
+    <div id="gameViewport" class="fixed inset-0 z-[200] hidden bg-black">
+        <div class="absolute top-6 right-6 z-[210] flex gap-3">
+             <div class="flex items-center px-4 py-2 bg-black/50 backdrop-blur-md rounded-xl border border-white/10">
+                <span id="activeGameTitle" class="text-[10px] font-black uppercase tracking-widest text-yellow-400">...</span>
+            </div>
+            <button onclick="closeGameFrame()" class="p-4 bg-yellow-400 rounded-2xl text-black"><i data-lucide="power"></i></button>
+        </div>
+        <iframe id="gameFrame" src="" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-pointer-lock" class="w-full h-full border-none"></iframe>
     </div>
 
     <script>
         let isProxyMode = false;
         let selectedPrefix = "/?.cnn.com";
+        let currentGameCat = 'All';
 
         const projects = [
-            {
-                id: 'lite',
-                title: 'Flash Lite',
-                tag: 'LITE',
-                tagStyle: 'text-blue-400 bg-blue-400/10 border-blue-400/20',
-                icon: 'zap',
-                iconColor: 'text-blue-400',
-                iconBg: 'bg-blue-500/10',
-                shortDesc: 'The most optimized web proxy. Version 6.3. Thats Flash Lite.',
-                longDesc: 'Flash Lite is optimized for speed and access. It uses an all-new Lite engine, only available on Flash Lite. Flash Lite is currently unavailable to the public as we resolve some access issues via the website.',
-                link: 'https://itsmeh1.github.io/Flash-Lite',
-                repo: 'itsmeh1/Flash-Lite',
-                features: ['Zero-latency engine', 'Auto Pre-Flight Launch', 'Private', 'Daily patches & bug fixes'], 'Ad Free',
-                runtime: { engine: 'Lite', version: '6.3.0', environment: 'GitHub' },
-                isAvailable: false
-            },
             {
                 id: 'plus',
                 title: 'Flash Plus',
@@ -205,11 +174,43 @@
                 iconColor: 'text-yellow-400',
                 iconBg: 'bg-yellow-500/10',
                 shortDesc: "Premium-grade multi-threaded bypass system.",
-                longDesc: 'The apex of stealth technology. Flash Plus features dynamic IP rotation and multi-tab sandboxing for maximum reliability.',
+                longDesc: 'The apex of stealth technology. Flash Plus features dynamic IP rotation and multi-tab sandboxing for maximum reliability and 100% site compatibility.',
                 link: '#',
                 repo: 'itsmeh1/Flash-Plus',
                 features: ['Full Internet Access', 'Product Bypass', 'Low-Latency engine', 'Extremely Secure', 'Ad Free'],
                 runtime: { engine: 'Scramjet v2', version: 'BETA 2.0', environment: 'Railway' },
+                isAvailable: false
+            },
+            {
+                id: 'games',
+                title: 'Gamz LaunchR',
+                tag: 'NEW',
+                tagStyle: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
+                icon: 'gamepad-2',
+                iconColor: 'text-yellow-400',
+                iconBg: 'bg-yellow-500/10',
+                shortDesc: 'A safe, iframe-optimized library of high-speed web games.',
+                longDesc: 'Gamz LaunchR is a curated repository of web-based games that are specifically configured to bypass iframe restrictions. Includes multiplayer IO games, retro classics, and puzzle suites.',
+                link: 'LAUNCH_GAMES',
+                repo: 'itsmeh1/Gamz-LaunchR',
+                features: ['Iframe-Safe', 'Ad-Free Versions', 'Multiplayer Support', 'Performance Optimized'],
+                runtime: { engine: 'SafeFrame', version: '2.1', environment: 'Static' },
+                isAvailable: true
+            },
+            {
+                id: 'lite',
+                title: 'Flash Lite',
+                tag: 'LITE',
+                tagStyle: 'text-blue-400 bg-blue-400/10 border-blue-400/20',
+                icon: 'zap',
+                iconColor: 'text-blue-400',
+                iconBg: 'bg-blue-500/10',
+                shortDesc: 'The most optimized web proxy. Version 6.3.',
+                longDesc: 'Flash Lite is optimized for speed and access. It uses an all-new Lite engine. Currently undergoing maintenance for the public release.',
+                link: 'https://itsmeh1.github.io/Flash-Lite',
+                repo: 'itsmeh1/Flash-Lite',
+                features: ['Zero-latency engine', 'Auto Pre-Flight', 'Private', 'Ad Free'],
+                runtime: { engine: 'Lite', version: '6.3.0', environment: 'GitHub' },
                 isAvailable: false
             },
             {
@@ -221,41 +222,23 @@
                 iconColor: 'text-slate-400',
                 iconBg: 'bg-slate-500/10',
                 shortDesc: "The original foundation of the Flash ecosystem.",
-                longDesc: 'No longer receiving updates but remains available for testing.',
+                longDesc: 'The stable classic version of Flash. No longer receiving updates but fully functional.',
                 link: 'https://itsmeh1.github.io/Flash-Legacy',
                 repo: 'itsmeh1/Flash-Legacy',
-                features: ['Classic Tunneling', 'Untouched Legacy Version', 'Legacy Support'],
+                features: ['Classic Tunneling', 'Untouched Version', 'Legacy Support'],
                 runtime: { engine: 'Classical Flash', version: '4.0.0', environment: 'Static' },
                 isAvailable: true
             }
         ];
 
-        function saveSelection() {
-            selectedPrefix = document.getElementById('proxyPrefix').value;
-            const portal = document.getElementById('projectPortal');
-            if (portal.classList.contains('portal-open')) {
-                const currentTitle = document.getElementById('portalTitle').innerText;
-                const project = projects.find(p => p.title === currentTitle);
-                if(project) updatePortalLaunchButton(project);
-            }
-        }
-
-        function updateProxyState(checkbox) {
-            isProxyMode = checkbox.checked;
-            const icon = document.getElementById('proxyIcon');
-            const container = document.getElementById('proxyContainer');
-            const selector = document.getElementById('prefixSelectorContainer');
-
-            if(isProxyMode) {
-                icon.classList.replace('text-slate-500', 'text-yellow-400');
-                container.classList.add('proxy-active');
-                selector.classList.add('visible');
-            } else {
-                icon.classList.replace('text-yellow-400', 'text-slate-500');
-                container.classList.remove('proxy-active');
-                selector.classList.remove('visible');
-            }
-        }
+        const gameRegistry = [
+            { id: '1v1', title: '1v1.LOL', category: 'Multiplayer', url: 'https://1v1.lol/' },
+            { id: 'slope', title: 'Slope', category: 'Action', url: 'https://slowroads.io/' },
+            { id: 'tetris', title: 'Tetris JS', category: 'Retro', url: 'https://chvin.github.io/react-tetris/' },
+            { id: 'pacman', title: 'Pac-Man', category: 'Retro', url: 'https://macek.github.io/google_pacman/' },
+            { id: 'snake', title: 'Snake', category: 'Retro', url: 'https://thecodeplayer.com/experiments/snake_game_html5.html' },
+            { id: '2048', title: '2048', category: 'Puzzle', url: 'https://play2048.co/' }
+        ];
 
         function renderCards() {
             const grid = document.getElementById('appGrid');
@@ -263,7 +246,7 @@
             projects.forEach(proj => {
                 const card = document.createElement('div');
                 card.className = 'app-card group relative bg-[#16161a] border border-white/5 rounded-3xl p-6 hover:border-white/10 transition-all duration-300 cursor-pointer';
-                card.onclick = () => openPortal(proj.id);
+                card.onclick = () => proj.id === 'games' ? openGameLauncher() : openPortal(proj.id);
                 card.innerHTML = `
                     <div class="flex items-start gap-4">
                         <div class="w-12 h-12 rounded-2xl ${proj.iconBg} flex items-center justify-center border border-white/5">
@@ -281,73 +264,127 @@
             lucide.createIcons();
         }
 
+        function openGameLauncher() {
+            document.getElementById('gameLauncherPortal').classList.replace('portal-closed', 'portal-open');
+            document.body.style.overflow = 'hidden';
+            renderLauncherGames();
+            lucide.createIcons();
+        }
+
+        function closeGameLauncher() {
+            document.getElementById('gameLauncherPortal').classList.replace('portal-open', 'portal-closed');
+            document.body.style.overflow = '';
+        }
+
+        function filterCategory(cat) {
+            currentGameCat = cat;
+            document.querySelectorAll('#launcherCategories .category-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.includes(cat) || (cat === 'All' && btn.innerText === 'All'));
+            });
+            renderLauncherGames();
+        }
+
+        function renderLauncherGames() {
+            const grid = document.getElementById('launcherGrid');
+            grid.innerHTML = '';
+            gameRegistry.filter(g => currentGameCat === 'All' || g.category === currentGameCat).forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'bg-white/5 border border-white/5 rounded-2xl p-5 hover:border-yellow-400/40 cursor-pointer transition-all';
+                card.onclick = () => launchGame(game);
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-black rounded-lg flex items-center justify-center border border-white/10">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=${new URL(game.url).hostname}" class="w-6 h-6">
+                        </div>
+                        <span class="text-[9px] font-bold text-slate-500 uppercase">${game.category}</span>
+                    </div>
+                    <h3 class="text-sm font-black uppercase tracking-tight text-white">${game.title}</h3>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function launchGame(game) {
+            document.getElementById('activeGameTitle').innerText = game.title;
+            document.getElementById('gameFrame').src = game.url;
+            document.getElementById('gameViewport').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeGameFrame() {
+            document.getElementById('gameViewport').classList.add('hidden');
+            document.getElementById('gameFrame').src = '';
+        }
+
+        function updateProxyState(checkbox) {
+            isProxyMode = checkbox.checked;
+            document.getElementById('proxyIcon').classList.toggle('text-yellow-400', isProxyMode);
+            document.getElementById('proxyIcon').classList.toggle('text-slate-500', !isProxyMode);
+            document.getElementById('proxyContainer').classList.toggle('proxy-active', isProxyMode);
+            document.getElementById('prefixSelectorContainer').classList.toggle('visible', isProxyMode);
+        }
+
+        function openPortal(id) {
+            const project = projects.find(p => p.id === id);
+            const portal = document.getElementById('projectPortal');
+            document.getElementById('portalContent').innerHTML = `
+                <div class="flex flex-col md:flex-row items-start gap-8 mb-16">
+                    <div class="w-24 h-24 rounded-3xl ${project.iconBg} flex items-center justify-center border border-white/10 shrink-0">
+                        <i data-lucide="${project.icon}" class="${project.iconColor} w-12 h-12"></i>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest border ${project.tagStyle}">${project.tag}</div>
+                        <h2 class="text-5xl md:text-6xl font-black text-white tracking-tighter">${project.title}</h2>
+                        <p class="text-lg text-slate-400 font-medium">${project.shortDesc}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-10">
+                        <div class="glass p-8 rounded-3xl">
+                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Description</h3>
+                            <p class="text-slate-300 leading-relaxed text-lg">${project.longDesc}</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            ${project.features.map(f => `
+                                <div class="flex items-center gap-3 p-4 glass rounded-2xl text-sm border-white/5">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                                    <span class="text-slate-300 font-medium">${f}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-[#121216] border border-white/10 rounded-3xl p-6 shadow-xl">
+                            <a href="${project.isAvailable ? (isProxyMode ? project.link + selectedPrefix : project.link) : '#'}" 
+                               target="_blank" 
+                               class="flex items-center justify-center gap-3 w-full py-4 rounded-2xl ${project.isAvailable ? 'bg-white text-black' : 'bg-white/5 text-slate-600 cursor-not-allowed'} font-black text-sm transition-all">
+                                ${project.isAvailable ? 'Initialize <i data-lucide="external-link"></i>' : 'Not Available <i data-lucide="lock"></i>'}
+                            </a>
+                        </div>
+                        <div class="bg-[#121216] border border-white/10 rounded-3xl p-6 shadow-xl">
+                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Specs</h3>
+                            ${Object.entries(project.runtime).map(([key, value]) => `
+                                <div class="flex justify-between items-center text-xs mb-2">
+                                    <span class="text-slate-500 font-bold uppercase">${key}</span>
+                                    <span class="text-slate-200 font-mono">${value}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            portal.classList.replace('portal-closed', 'portal-open');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
         function filterApps() {
             const query = document.getElementById('siteSearch').value.toLowerCase();
             const cards = document.querySelectorAll('.app-card');
             cards.forEach((card, index) => {
                 const title = projects[index].title.toLowerCase();
-                if (title.includes(query)) card.style.display = 'block';
-                else card.style.display = 'none';
+                card.style.display = title.includes(query) ? 'block' : 'none';
             });
-        }
-
-        function updatePortalLaunchButton(project) {
-            const btn = document.getElementById('portalLaunchBtn');
-            const proxyLabel = document.getElementById('portalProxyStatus');
-            const prefixDisplay = document.getElementById('activePrefixDisplay');
-            
-            if (project.isAvailable) {
-                btn.href = isProxyMode ? project.link + selectedPrefix : project.link;
-                btn.className = "flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-white text-black font-black text-sm hover:scale-[1.01] transition-all";
-                btn.innerHTML = `Open Project <i data-lucide="external-link" class="w-4 h-4"></i>`;
-                
-                if(isProxyMode) {
-                    proxyLabel.classList.remove('hidden');
-                    prefixDisplay.innerText = selectedPrefix.replace('/?.', '').toUpperCase();
-                } else {
-                    proxyLabel.classList.add('hidden');
-                }
-            } else {
-                btn.href = "#";
-                btn.className = "flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-white/5 text-slate-600 font-black text-sm cursor-not-allowed border border-white/5";
-                btn.innerHTML = `Not Available <i data-lucide="lock" class="w-4 h-4"></i>`;
-                proxyLabel.classList.add('hidden');
-            }
-            lucide.createIcons({ root: btn });
-        }
-
-        function openPortal(projectId) {
-            const project = projects.find(p => p.id === projectId);
-            if(!project) return;
-
-            document.getElementById('portalTitle').innerText = project.title;
-            document.getElementById('portalShortDesc').innerText = project.shortDesc;
-            document.getElementById('portalLongDesc').innerText = project.longDesc;
-            
-            const tag = document.getElementById('portalTag');
-            tag.innerText = project.tag;
-            tag.className = `inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest border ${project.tagStyle}`;
-
-            document.getElementById('portalIconContainer').innerHTML = `<i data-lucide="${project.icon}" class="${project.iconColor} w-10 h-10"></i>`;
-
-            document.getElementById('portalFeatures').innerHTML = project.features.map(f => `
-                <div class="flex items-center gap-3 p-4 glass rounded-2xl text-sm border-white/5">
-                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                    <span class="text-slate-300 font-medium">${f}</span>
-                </div>
-            `).join('');
-
-            document.getElementById('portalRuntime').innerHTML = Object.entries(project.runtime).map(([key, value]) => `
-                <div class="flex justify-between items-center text-xs">
-                    <span class="text-slate-500 font-bold uppercase">${key}</span>
-                    <span class="text-slate-200 font-mono">${value}</span>
-                </div>
-            `).join('');
-
-            updatePortalLaunchButton(project);
-            document.getElementById('projectPortal').classList.replace('portal-closed', 'portal-open');
-            document.body.style.overflow = 'hidden';
-            lucide.createIcons({ root: document.getElementById('projectPortal') });
         }
 
         function closePortal() {
