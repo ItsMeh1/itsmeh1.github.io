@@ -3,393 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> > ItsMeh1 < </title>
+    <title>Server</title>
+    <!-- Tailwind CSS for high-quality utility-first styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            discord: '#5865F2',
+                            railway: '#0B0D0E',
+                            firebase: '#FFCA28',
+                            lua: '#00278D',
+                            luau: '#199EE2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons for clean UI assets -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Syncopate:wght@700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        #projectPortal { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease; }
-        .portal-closed { transform: translateY(40px) scale(0.98); opacity: 0; pointer-events: none; }
-        .portal-open { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
-        .glass { background: rgba(22, 22, 26, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .proxy-active { border-color: rgba(234, 179, 8, 0.4) !important; box-shadow: 0 0 20px rgba(234, 179, 8, 0.05); }
-        #prefixSelectorContainer { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); max-width: 0; opacity: 0; margin: 0; display: flex; align-items: center; overflow: hidden; }
-        #prefixSelectorContainer.visible { max-width: 200px; opacity: 1; margin-left: 0.75rem; margin-right: 0.75rem; }
-        .project-section + .project-section { margin-top: 3.5rem; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* Custom scrollbar for premium feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #404040;
+        }
     </style>
 </head>
-<body class="bg-[#0a0a0c] text-slate-200 overflow-x-hidden relative">
-    <nav class="fixed top-0 left-0 w-full z-50 glass border-b-0 border-white/5 bg-black/20 backdrop-blur-md">
-        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 hover:scale-105 transition-transform">ItsMeh1</a>
-            <div class="flex items-center gap-6 text-sm font-semibold text-slate-300">
-                <a href="info.html" class="text-white">Info</a>
-                <a href="index.html" class="hover:text-blue-400 transition-colors duration-200">Projects</a>
-            </div>
-        </div>
-    </nav>
+<body class="bg-neutral-950 text-neutral-200 min-h-screen flex justify-center items-start py-12 px-4 selection:bg-neutral-800 selection:text-white">
 
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]"></div>
-    </div>
+    <!-- Main Container restricted to 500px to center beautifully in the middle of the screen -->
+    <main class="w-full max-w-[500px] flex flex-col gap-6 animate-fade-in">
+        
+        <!-- Profile Header Section -->
+        <section class="bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-md rounded-3xl p-6 flex flex-col items-center text-center relative overflow-hidden shadow-xl">
+            <!-- Subtle background decorative glow -->
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div id="mainHub" class="relative max-w-6xl mx-auto px-6 pt-24 pb-16 flex flex-col items-center justify-start min-h-screen z-10 transition-opacity duration-500">
-        <div class="text-center mb-8 w-full">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-400 mb-4 shadow-lg backdrop-blur-md">
-                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span></span>
-                Active Development: Flash Ecosystem
-            </div>
-            <h1 class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-500 mb-3">ItsMeh1 <span class="text-yellow-400">⚡</span></h1>
-            <p class="text-slate-400 max-w-xl mx-auto leading-relaxed">Creating random <span class="text-white font-semibold">projects</span> for the fun of it.</p>
-        </div>
-
-        <div class="w-full max-w-4xl flex flex-col md:flex-row items-stretch gap-3 mb-10 z-10">
-            <div class="relative flex-1">
-                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none"><i data-lucide="search" class="text-slate-500 w-5 h-5"></i></div>
-                <input type="text" id="siteSearch" placeholder="Filter projects..." class="w-full h-full bg-[#16161a]/80 backdrop-blur-md border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-white/20 transition-all shadow-xl">
-            </div>
-
-            <div class="flex items-center glass rounded-2xl p-2 px-3 shadow-xl border border-white/10 shrink-0" id="proxyContainer">
-                <div class="flex items-center gap-2 pr-3 border-r border-white/5">
-                    <i data-lucide="shield" class="w-4 h-4 text-slate-500 transition-all" id="proxyIcon"></i>
-                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">Proxy</span>
+            <!-- Avatar -->
+            <div class="relative group mb-4">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+                <div class="relative w-24 h-24 rounded-full overflow-hidden bg-neutral-950 border-2 border-neutral-800 flex items-center justify-center">
+                    <!-- Loaded Avatar with a seamless bot-style dynamic fallback on error -->
+                    <img 
+                        src="https://cdn.discordapp.com/avatars/954595615910797323/226bb034f9aed897b874a5bba99427aa.webp?size=160" 
+                        alt="Server's Avatar" 
+                        class="w-full h-full object-cover"
+                        onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Server&backgroundColor=3b82f6'"
+                    />
                 </div>
-                <div id="prefixSelectorContainer">
-                    <select id="proxyPrefix" class="bg-white/5 border border-white/10 rounded-lg py-1.5 px-2 text-[11px] text-slate-300 focus:outline-none transition-colors cursor-pointer w-32">
-                        <option value="/?.cnn.com">CNN Cloak</option>
-                        <option value="/?.classroom.google.com">Classroom</option>
-                        <option value="/?.google.com">Google</option>
-                        <option value="/?.wikipedia.org">Wiki</option>
-                    </select>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer ml-2">
-                    <input type="checkbox" id="proxyToggle" class="sr-only peer">
-                    <div class="w-10 h-5 bg-white/10 rounded-full peer peer-checked:after:translate-x-5 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-yellow-500 peer-checked:after:bg-white transition-all"></div>
-                </label>
             </div>
-        </div>
 
-        <div id="projectSections" class="w-full max-w-5xl space-y-14"></div>
-    </div>
+            <!-- Profile Info -->
+            <h1 class="text-2xl font-bold text-white tracking-tight">Server</h1>
+            <p class="text-neutral-400 text-sm mt-1 max-w-[320px]">Heya! I'm a fullstack-ish dev, who mostly likes frontend coding more. You'll find me as Server on anything other then Github, there I'm ItsMeh1. I've lately been making a desktop app version of my project, Flash v4. I've also been working on groups for my project Mobify.</p>
 
-    <div id="projectPortal" class="fixed inset-0 z-[100] portal-closed bg-[#0a0a0c] overflow-y-auto no-scrollbar">
-        <div class="sticky top-0 z-[110] p-6 flex justify-between items-center bg-[#0a0a0c]/90 backdrop-blur-xl border-b border-white/5">
-            <button id="backButton" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition-all font-semibold">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+            <!-- Discord Handle (Click to Copy) -->
+            <button onclick="copyDiscordTag(this)" class="mt-4 flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 rounded-full text-xs text-neutral-300 transition-all duration-300 hover:scale-105 active:scale-95 group" title="Click to copy Discord username">
+                <i data-lucide="message-square" class="w-3.5 h-3.5 text-brand-discord group-hover:animate-pulse"></i>
+                <span class="font-mono">Server</span>
+                <span class="text-[10px] bg-neutral-800 text-neutral-400 px-1.5 py-0.5 rounded ml-1 group-hover:text-white transition-colors duration-200">Copy</span>
             </button>
-            <div id="portalProxyStatus" class="hidden sm:flex items-center gap-2 text-[10px] font-black text-yellow-500 bg-yellow-500/10 px-4 py-2 rounded-full border border-yellow-500/20 tracking-widest">
-                <i data-lucide="shield-check" class="w-4 h-4"></i> TUNNEL: <span id="activePrefixDisplay" class="text-white">NONE</span>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-md rounded-3xl p-6 shadow-xl">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4 flex items-center gap-2">
+                <i data-lucide="code-2" class="w-4 h-4 text-blue-400"></i> Tech Stack & Skills
+            </h2>
+            
+            <!-- Skills grid containing beautiful interactive vectors -->
+            <div class="grid grid-cols-4 gap-4">
+                
+                <!-- HTML5 (Official Brand Logo) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-orange-500/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">HTML5</span>
+                </div>
+
+                <!-- CSS3 (Official Brand Logo) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-blue-500/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="CSS3" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">CSS3</span>
+                </div>
+
+                <!-- JavaScript (Official JS Yellow Block) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-yellow-500/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" class="w-10 h-10 object-contain rounded-lg transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">JavaScript</span>
+                </div>
+
+                <!-- TypeScript (Official TS Blue Block) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-blue-400/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript" class="w-10 h-10 object-contain rounded-lg transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">TypeScript</span>
+                </div>
+
+                <!-- Lua (Official Moon & Planet System) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-indigo-500/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/lua/lua-original.svg" alt="Lua" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Lua</span>
+                </div>
+
+                <!-- Luau (Gradient Infinity Engine Loop) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-cyan-400/40 transition-all duration-300">
+                    <svg class="w-10 h-10 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="64" height="64" rx="14" fill="#0A0F1D"/>
+                        <path d="M18 40C15 34 15 25 24 19C33 13 43 16 46 22C49 28 44 37 34 42C24 47 15 43 12 36C9 29 14 20 22 16" stroke="#199EE2" stroke-width="5" stroke-linecap="round" fill="none"/>
+                        <circle cx="46" cy="22" r="3.5" fill="#00A2FF"/>
+                    </svg>
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Luau (Roblox Engine)</span>
+                </div>
+
+                <!-- Railway (Modern Cloud Track Rails) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-neutral-200/40 transition-all duration-300">
+                    <svg class="w-10 h-10 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="64" height="64" rx="14" fill="#0B0D0E"/>
+                        <line x1="18" y1="46" x2="46" y2="18" stroke="#F43F5E" stroke-width="7" stroke-linecap="round"/>
+                        <line x1="28" y1="46" x2="46" y2="28" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+                    </svg>
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Railway Cloud</span>
+                </div>
+
+                <!-- Firebase (Three-layered isometric fire flame) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-orange-400/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="Firebase" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Firebase BaaS</span>
+                </div>
+
             </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="flex flex-col gap-3">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-neutral-400 px-2 flex items-center gap-2">
+                <i data-lucide="folder-git-2" class="w-4 h-4 text-purple-400"></i> Featured Projects
+            </h2>
+
+            <!-- Dynamic Projects Container -->
+            <div id="projectsContainer" class="flex flex-col gap-3">
+                <!-- Project cards will be dynamically generated here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Dynamic Detailed View Modal (Global Dialog) -->
+        <dialog id="projectModal" class="bg-transparent backdrop:bg-neutral-950/80 backdrop:backdrop-blur-md p-4 w-full max-w-[480px] outline-none border-none">
+            <div class="bg-neutral-900 border border-neutral-800 rounded-3xl p-6 shadow-2xl relative flex flex-col gap-5 text-neutral-200 overflow-hidden">
+                
+                <!-- Background ambient styling for modal context -->
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <!-- Header block -->
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div id="modalIconContainer" class="w-10 h-10 rounded-xl flex items-center justify-center border">
+                            <!-- Dynamic Icon Inserts Here -->
+                        </div>
+                        <div>
+                            <h3 id="modalTitle" class="text-lg font-bold text-white">Project Title</h3>
+                            <p id="modalCategory" class="text-xs text-neutral-400 font-medium">Infrastructure</p>
+                        </div>
+                    </div>
+                    <!-- Close Button -->
+                    <button onclick="closeModal()" class="p-1.5 rounded-xl bg-neutral-800 border border-neutral-700/60 hover:bg-neutral-700 text-neutral-400 hover:text-white transition-all duration-200">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Content Area -->
+                <div class="flex flex-col gap-4">
+                    <p id="modalDescription" class="text-neutral-300 text-sm leading-relaxed">
+                        Detailed explanation of the project setup.
+                    </p>
+
+                    <!-- Tech Badges Container -->
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-bold block mb-2">Built With</span>
+                        <div id="modalTechStack" class="flex flex-wrap gap-2">
+                            <!-- Badges dynamic insertion -->
+                        </div>
+                    </div>
+
+                    <!-- Highlight Features -->
+                    <div class="bg-neutral-950/50 border border-neutral-800/80 rounded-2xl p-4">
+                        <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-bold block mb-2">Key Specs</span>
+                        <ul id="modalFeatures" class="text-xs text-neutral-300 space-y-2">
+                            <!-- List items dynamic insertion -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Actions Footer (Dynamically generated links) -->
+                <div id="modalActions" class="flex flex-wrap items-center gap-3 mt-2">
+                    <!-- Link buttons inserted here -->
+                </div>
+
+            </div>
+        </dialog>
+
+        <!-- Footer / Copy notification toast dynamic spot -->
+        <footer class="text-center text-[11px] text-neutral-600 mt-4 flex flex-col items-center gap-2">
+            <span>Check me out on discord!</span>
+            <span>&copy; 2026 Server. All rights reserved.</span>
+        </footer>
+
+        <!-- Micro UI Notification Toast -->
+        <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-neutral-900 border border-neutral-800 px-4 py-2.5 rounded-full text-xs text-neutral-200 shadow-2xl flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 translate-y-2 z-50">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+            <span id="toastMessage">Copied to clipboard!</span>
         </div>
-        <div class="max-w-5xl mx-auto px-6 py-12" id="portalContent"></div>
-    </div>
 
+    </main>
+
+    <!-- App JavaScript Logic -->
     <script>
-        let isProxyMode = false;
-        let selectedPrefix = '/?.cnn.com';
+        // Initialize beautiful Lucide icons
+        lucide.createIcons();
 
-        const projectGroups = [
-            {
-                groupName: 'Flash Products',
-                groupNote: 'All of your Flash-related projects in one place.',
-                projects: [
-                    {
-                        id: 'plus',
-                        title: 'Flash Plus',
-                        tag: 'BETA 2.0',
-                        tagStyle: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
-                        icon: 'shield-check',
-                        iconColor: 'text-yellow-400',
-                        iconBg: 'bg-yellow-500/10',
-                        shortDesc: 'Premium-grade multi-threaded bypass system.',
-                        longDesc: 'The apex of stealth technology. Flash Plus features dynamic IP rotation and multi-tab sandboxing for maximum reliability and compatibility.',
-                        links: [
-                            { label: 'Open Project', href: '#' },
-                            { label: 'GitHub Repo', href: '#' }
-                        ],
-                        features: ['Full Internet Access', 'Product Bypass', 'Low-Latency engine', 'Extremely Secure', 'Ad Free'],
-                        runtime: { engine: 'Scramjet v2', version: 'CURRENTLY DOWN', environment: 'Railway' },
-                        isAvailable: false
-                    },
-                    {
-                        id: 'lite',
-                        title: 'Flash Lite',
-                        tag: 'LITE',
-                        tagStyle: 'text-blue-400 bg-blue-400/10 border-blue-400/20',
-                        icon: 'zap',
-                        iconColor: 'text-blue-400',
-                        iconBg: 'bg-blue-500/10',
-                        shortDesc: 'The most optimized web proxy. Version 6.3.',
-                        longDesc: 'Flash Lite is optimized for speed and access. It uses an all-new Lite engine. Currently undergoing maintenance for the public release.',
-                        links: [
-                            { label: 'Open Project', href: 'https://itsmeh1.github.io/Flash-Lite' },
-                            { label: 'GitHub Repo', href: 'https://github.com/itsmeh1/Flash-Lite' }
-                        ],
-                        features: ['Zero-latency engine', 'Auto Pre-Flight', 'Private', 'Ad Free'],
-                        runtime: { engine: 'Lite', version: '6.3.0', environment: 'GitHub' },
-                        isAvailable: true
-                    },
-                    {
-                        id: 'legacy',
-                        title: 'Flash Legacy',
-                        tag: 'LEGACY',
-                        tagStyle: 'text-slate-400 bg-slate-400/10 border-slate-400/20',
-                        icon: 'history',
-                        iconColor: 'text-slate-400',
-                        iconBg: 'bg-slate-500/10',
-                        shortDesc: 'The original foundation of the Flash ecosystem.',
-                        longDesc: 'The stable classic version of Flash. No longer receiving updates but fully functional.',
-                        links: [
-                            { label: 'Open Project', href: 'https://itsmeh1.github.io/Flash-Legacy' },
-                            { label: 'GitHub Repo', href: 'https://github.com/itsmeh1/Flash-Legacy' }
-                        ],
-                        features: ['Classic Tunneling', 'Untouched Version', 'Legacy Support'],
-                        runtime: { engine: 'Classical Flash', version: '4.0.0', environment: 'Static' },
-                        isAvailable: true
-                    }
+        // Project detailed configurations
+        const projectData = {
+            flash: {
+                title: "Flash v4",
+                category: "Browser",
+                icon: "zap",
+                colorClass: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+                iconHoverClass: "group-hover:bg-blue-500/20 group-hover:text-blue-300",
+                titleHoverClass: "group-hover:text-blue-400",
+                description: "Latest Flash Proxy that serves games, messaging, browsing, videos, and movies. Available as an App.",
+                tech: ["HTML", "Javascript", "Hostable on Railway", "Electron JS"],
+                features: [
+                    "⚡ Extremely fast browsing via Chronium",
+                    "🎮 Games and Fun, Guaranteed",
+                    "🔒 Keeps you and your information safe",
+                    "📈 Updates all the time!"
+                ],
+                // Add unlimited dynamic links here! Set primary to true to make it white and highlighted.
+                links: [
+                    { label: "Launch Live", url: "#", icon: "external-link", primary: true },
+                    { label: "Download App", url: "#", icon: "download", primary: false },
+                    { label: "Docs", url: "#", icon: "book", primary: false }
                 ]
             },
-            {
-                groupName: 'Bear2 & ItsMeh1\'s Arcade Lineup',
-                groupNote: 'More proxies cause why not, some games.',
-                projects: [
-                    {
-                        id: 'arcade',
-                        title: 'ItsMeh1\'s Arcade',
-                        tag: 'IN-DEV',
-                        tagStyle: 'text-green-400 bg-green-400/10 border-green-400/20',
-                        icon: 'gamepad-2',
-                        iconColor: 'text-green-400',
-                        iconBg: 'bg-green-500/10',
-                        shortDesc: 'Official Arcade for ItsMeh1',
-                        longDesc: 'Simple project to create an extremely fast, ad-free, free, and unblocked proxy. 2026.',
-                        links: [
-                            { label: 'Main Link to come', href: '#' },
-                        ],
-                        features: ['Ad-Free', 'Extremely Fast', 'More links supported', 'Scramjet 2.0'],
-                        runtime: { engine: 'SJ v2', version: 'In-Dev', environment: 'smth idk' },
-                        isAvailable: false
-                    },
-                    {
-                        id: 'arcplus',
-                        title: 'Arc+',
-                        tag: 'IN-DEV',
-                        tagStyle: 'text-green-400 bg-green-400/10 border-green-400/20',
-                        icon: 'joystick',
-                        iconColor: 'text-green-400',
-                        iconBg: 'bg-green-500/10',
-                        shortDesc: 'Your only gaming site.',
-                        longDesc: 'Simple yet unblocked proxy for hundreds of games and more to come.',
-                        links: [
-                            { label: 'Main Link to come', href: '#' },
-                        ],
-                        features: ['Ad-Free', 'Extremely Fast', 'More links supported', 'Hundreds of Games.'],
-                        runtime: { engine: 'Arc+', version: 'In-Dev', environment: 'github?' },
-                        isAvailable: false
-                    }
+            mobify: {
+                title: "Mobify",
+                category: "Social Media",
+                icon: "phone",
+                colorClass: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+                iconHoverClass: "group-hover:bg-purple-500/20 group-hover:text-purple-300",
+                titleHoverClass: "group-hover:text-purple-400",
+                description: "A simple social media app thats included in Flash v4.",
+                tech: ["Javascript", "CSS", "HTML", "Firebase", "Github"],
+                features: [
+                    "🛡️ Rate Limiting Technology",
+                    "👥 Private & Public Groups for Messaging",
+                    "✉️ Public Posts",
+                    "🔨 Often Maintenence, User Verification and Profiles, & Active Moderation"
+                ],
+                links: [
+                    { label: "Sign Up", url: "https://itsmeh1.gihtub.io/Mobify", icon: "external-link", primary: true }
                 ]
             }
-        ];
+        };
 
-        function getAllProjects() {
-            return projectGroups.flatMap(group => group.projects);
+        // Modal elements cache
+        const modal = document.getElementById('projectModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalIconContainer = document.getElementById('modalIconContainer');
+        const modalTechStack = document.getElementById('modalTechStack');
+        const modalFeatures = document.getElementById('modalFeatures');
+        const modalActions = document.getElementById('modalActions');
+        const projectsContainer = document.getElementById('projectsContainer');
+
+        // Dynamically render project cards
+        function renderProjectCards() {
+            projectsContainer.innerHTML = Object.entries(projectData).map(([id, data]) => `
+                <button onclick="openProjectModal('${id}')" class="text-left w-full bg-neutral-900/40 border border-neutral-800/80 hover:border-neutral-700/80 backdrop-blur-md rounded-2xl p-5 flex items-center justify-between group transition-all duration-300 hover:translate-x-1 hover:shadow-lg active:scale-[0.99]">
+                    <div class="flex items-center gap-4 w-full min-w-0">
+                        <!-- Added 'shrink-0' to keep the icon square under any text conditions -->
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center border transition-colors duration-300 shrink-0 ${data.colorClass} ${data.iconHoverClass}">
+                            <i data-lucide="${data.icon}" class="w-6 h-6"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="font-semibold text-white transition-colors duration-200 ${data.titleHoverClass}">${data.title}</h3>
+                            <p class="text-neutral-400 text-xs mt-0.5 line-clamp-1">${data.description}</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-500 group-hover:text-white transition-colors duration-300 shrink-0"></i>
+                </button>
+            `).join('');
+            
+            // Re-initialize Lucide icons for the newly injected HTML
+            lucide.createIcons(); 
         }
 
-        function safeCreateIcons() {
-            if (window.lucide && typeof window.lucide.createIcons === 'function') {
-                window.lucide.createIcons();
+        // Initial render execution
+        renderProjectCards();
+
+        // Modal trigger functions
+        function openProjectModal(projectId) {
+            const data = projectData[projectId];
+            if (!data) return;
+
+            // Update content elements
+            modalTitle.textContent = data.title;
+            modalCategory.textContent = data.category;
+            modalDescription.textContent = data.description;
+
+            // Render themed icon dynamically
+            modalIconContainer.className = `w-10 h-10 rounded-xl flex items-center justify-center border ${data.colorClass}`;
+            modalIconContainer.innerHTML = `<i data-lucide="${data.icon}" class="w-5 h-5"></i>`;
+
+            // Render tech stack badges
+            modalTechStack.innerHTML = data.tech.map(techName => {
+                return `<span class="px-2.5 py-1 bg-neutral-800 border border-neutral-700/60 rounded-lg text-[11px] text-neutral-300 font-semibold flex items-center gap-1">${techName}</span>`;
+            }).join('');
+
+            // Render specification items
+            modalFeatures.innerHTML = data.features.map(feature => {
+                return `<li class="flex items-start gap-2">
+                    <span class="text-neutral-500 mt-0.5">•</span>
+                    <span>${feature}</span>
+                </li>`;
+            }).join('');
+
+            // Dynamically build action buttons from data.links array
+            if (data.links && data.links.length > 0) {
+                modalActions.innerHTML = data.links.map(link => {
+                    if (link.primary) {
+                        return `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-4 bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200">
+                                    <i data-lucide="${link.icon}" class="w-3.5 h-3.5"></i> ${link.label}
+                                </a>`;
+                    } else {
+                        return `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="py-2.5 px-4 bg-neutral-800 border border-neutral-700 hover:bg-neutral-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200">
+                                    <i data-lucide="${link.icon}" class="w-3.5 h-3.5"></i> ${link.label}
+                                </a>`;
+                    }
+                }).join('');
+                modalActions.style.display = 'flex';
+            } else {
+                modalActions.innerHTML = ''; // Clear if no links provided
+                modalActions.style.display = 'none';
             }
-        }
 
-        function saveSelection() {
-            const select = document.getElementById('proxyPrefix');
-            const display = document.getElementById('activePrefixDisplay');
-            if (!select) return;
-            selectedPrefix = select.value;
-            if (display) display.innerText = selectedPrefix;
-        }
-
-        function renderCards() {
-            const sectionsWrap = document.getElementById('projectSections');
-            if (!sectionsWrap) return;
-            sectionsWrap.innerHTML = '';
-
-            projectGroups.forEach(group => {
-                const section = document.createElement('section');
-                section.className = 'project-section';
-                section.dataset.group = group.groupName.toLowerCase();
-
-                section.innerHTML = `
-                    <div class="flex items-end justify-between gap-4 mb-6">
-                        <div>
-                            <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">${group.groupName}</h2>
-                            <p class="text-sm text-slate-500 mt-1">${group.groupNote}</p>
-                        </div>
-                        <div class="hidden md:block text-[10px] uppercase tracking-[0.3em] text-slate-600 font-black">${group.projects.length} projects</div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                `;
-
-                const grid = section.querySelector('div.grid');
-                group.projects.forEach(proj => {
-                    const card = document.createElement('div');
-                    card.className = 'app-card group relative bg-[#16161a] border border-white/5 rounded-3xl p-6 hover:border-white/10 transition-all duration-300 cursor-pointer';
-                    card.dataset.projectId = proj.id;
-                    card.dataset.search = `${proj.title} ${proj.shortDesc} ${(proj.links || []).map(l => l.label).join(' ')}`.toLowerCase();
-                    card.onclick = () => openPortal(proj.id);
-                    card.innerHTML = `
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-2xl ${proj.iconBg} flex items-center justify-center border border-white/5 shrink-0">
-                                <i data-lucide="${proj.icon}" class="${proj.iconColor} w-6 h-6"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <span class="${proj.tagStyle} text-[8px] font-black px-2 py-0.5 rounded tracking-widest mb-1 block w-fit border">${proj.tag}</span>
-                                <h3 class="text-lg font-bold text-white group-hover:text-yellow-400 transition-colors">${proj.title}</h3>
-                                <p class="text-xs text-slate-500 line-clamp-2 mt-1">${proj.shortDesc}</p>
-                            </div>
-                        </div>
-                        <div class="mt-5 flex flex-wrap gap-2">
-                            ${(proj.links || []).slice(0, 3).map(link => `<span class="text-[10px] px-2 py-1 rounded-full bg-white/5 border border-white/10 text-slate-400">${link.label}</span>`).join('')}
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-
-                sectionsWrap.appendChild(section);
-            });
-
-            safeCreateIcons();
-        }
-
-        function openPortal(id) {
-            const project = getAllProjects().find(p => p.id === id);
-            if (!project) return;
-
-            const portal = document.getElementById('projectPortal');
-            const launchUrl = project.links && project.links.length > 0 ? project.links[0].href : '#';
-
-            const linksHtml = (project.links || []).map(link => `
-                <a href="${link.href}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-semibold text-white transition-all">
-                    <span>${link.label}</span>
-                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
-                </a>
-            `).join('');
-
-            const featuresHtml = (project.features || []).map(f => `
-                <div class="flex items-center gap-3 p-4 glass rounded-2xl text-sm border-white/5">
-                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                    <span class="text-slate-300 font-medium">${f}</span>
-                </div>
-            `).join('');
-
-            const specsHtml = Object.entries(project.runtime || {}).map(([key, value]) => `
-                <div class="flex justify-between items-center text-xs mb-2">
-                    <span class="text-slate-500 font-bold uppercase">${key}</span>
-                    <span class="text-slate-200 font-mono">${value}</span>
-                </div>
-            `).join('');
-
-            document.getElementById('portalContent').innerHTML = `
-                <div class="flex flex-col md:flex-row items-start gap-8 mb-16">
-                    <div class="w-24 h-24 rounded-3xl ${project.iconBg} flex items-center justify-center border border-white/10 shrink-0">
-                        <i data-lucide="${project.icon}" class="${project.iconColor} w-12 h-12"></i>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest border ${project.tagStyle}">${project.tag}</div>
-                        <h2 class="text-5xl md:text-6xl font-black text-white tracking-tighter">${project.title}</h2>
-                        <p class="text-lg text-slate-400 font-medium">${project.shortDesc}</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 space-y-10">
-                        <div class="glass p-8 rounded-3xl">
-                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Description</h3>
-                            <p class="text-slate-300 leading-relaxed text-lg">${project.longDesc}</p>
-                        </div>
-                        <div class="glass p-8 rounded-3xl">
-                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Links</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">${linksHtml}</div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">${featuresHtml}</div>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="bg-[#121216] border border-white/10 rounded-3xl p-6 shadow-xl">
-                            <a href="${launchUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 w-full py-4 rounded-2xl ${project.isAvailable ? 'bg-white text-black' : 'bg-white/5 text-slate-600 cursor-not-allowed pointer-events-none'} font-black text-sm transition-all">
-                                ${project.isAvailable ? 'Initialize <i data-lucide="external-link"></i>' : 'Not Available <i data-lucide="lock"></i>'}
-                            </a>
-                        </div>
-                        <div class="bg-[#121216] border border-white/10 rounded-3xl p-6 shadow-xl">
-                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Specs</h3>
-                            ${specsHtml}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('activePrefixDisplay').innerText = selectedPrefix;
-            portal.classList.remove('portal-closed');
-            portal.classList.add('portal-open');
+            // Show standard dialog (uses seamless polyfill built-in desktop/mobile web views)
+            modal.showModal();
+            lucide.createIcons(); // Reactivate icons nested inside modal (including the new dynamically added button icons)
+            
+            // Lock background scrolling
             document.body.style.overflow = 'hidden';
-            safeCreateIcons();
         }
 
-        function closePortal() {
-            const portal = document.getElementById('projectPortal');
-            portal.classList.remove('portal-open');
-            portal.classList.add('portal-closed');
+        function closeModal() {
+            modal.close();
+            // Unlock scrolling
             document.body.style.overflow = '';
         }
 
-        function filterApps() {
-            const query = document.getElementById('siteSearch').value.toLowerCase().trim();
-            document.querySelectorAll('.project-section').forEach(section => {
-                let visible = false;
-                section.querySelectorAll('.app-card').forEach(card => {
-                    const match = (card.dataset.search || '').includes(query);
-                    card.style.display = match ? '' : 'none';
-                    if (match) visible = true;
-                });
-                section.style.display = visible ? '' : 'none';
-            });
+        // Close dialog on clicking outside the content window
+        modal.addEventListener('click', (event) => {
+            const rect = modal.getBoundingClientRect();
+            const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
+                               rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+            if (!isInDialog) {
+                closeModal();
+            }
+        });
+
+        // Quick Clipboard Utility (Fallback implementation for iframe sandbox security restrictions)
+        function copyDiscordTag(buttonElement) {
+            const textToCopy = "Server";
+            
+            // Modern copy mechanism with legacy fallback sequence
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => showToast("Discord username copied!"))
+                    .catch(() => fallbackCopy(textToCopy));
+            } else {
+                fallbackCopy(textToCopy);
+            }
         }
 
-        function updateProxyState(checkbox) {
-            isProxyMode = checkbox.checked;
-            const proxyIcon = document.getElementById('proxyIcon');
-            const proxyContainer = document.getElementById('proxyContainer');
-            const selector = document.getElementById('prefixSelectorContainer');
-            if (!proxyIcon || !proxyContainer || !selector) return;
-            proxyIcon.classList.toggle('text-yellow-400', isProxyMode);
-            proxyIcon.classList.toggle('text-slate-500', !isProxyMode);
-            proxyContainer.classList.toggle('proxy-active', isProxyMode);
-            selector.classList.toggle('visible', isProxyMode);
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  // Avoid scrolling to bottom
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast("Discord username copied!");
+            } catch (err) {
+                showToast("Failed to copy! Simply copy manual.");
+            }
+            document.body.removeChild(textArea);
         }
 
-        function initPage() {
-            const search = document.getElementById('siteSearch');
-            const proxyToggle = document.getElementById('proxyToggle');
-            const proxyPrefix = document.getElementById('proxyPrefix');
-            const backButton = document.getElementById('backButton');
-
-            if (search) search.value = '';
-            if (proxyPrefix) proxyPrefix.value = selectedPrefix;
-            renderCards();
-            saveSelection();
-            if (proxyToggle) proxyToggle.addEventListener('change', e => updateProxyState(e.target));
-            if (proxyPrefix) proxyPrefix.addEventListener('change', saveSelection);
-            if (search) search.addEventListener('input', filterApps);
-            if (backButton) backButton.addEventListener('click', closePortal);
-            safeCreateIcons();
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initPage);
-        } else {
-            initPage();
+        // Custom notification toast controller
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            // Clear prior timeouts to prevent flicker
+            clearTimeout(toastTimeout);
+            
+            // Activate toast animation sequence
+            toast.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+            }, 3000);
         }
     </script>
 </body>
