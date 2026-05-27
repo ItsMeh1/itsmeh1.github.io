@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server</title>
-    <!-- Tailwind CSS for high-quality utility-first styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -26,7 +25,6 @@
             }
         }
     </script>
-    <!-- Lucide Icons for clean UI assets -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -49,20 +47,15 @@
 </head>
 <body class="bg-neutral-950 text-neutral-200 min-h-screen flex justify-center items-start py-12 px-4 selection:bg-neutral-800 selection:text-white">
 
-    <!-- Main Container restricted to 500px to center beautifully in the middle of the screen -->
     <main class="w-full max-w-[500px] flex flex-col gap-6 animate-fade-in">
         
-        <!-- Profile Header Section -->
         <section class="bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-md rounded-3xl p-6 flex flex-col items-center text-center relative overflow-hidden shadow-xl">
-            <!-- Subtle background decorative glow -->
             <div class="absolute -top-24 -left-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <!-- Avatar -->
             <div class="relative group mb-4">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
                 <div class="relative w-24 h-24 rounded-full overflow-hidden bg-neutral-950 border-2 border-neutral-800 flex items-center justify-center">
-                    <!-- Loaded Avatar with a seamless bot-style dynamic fallback on error -->
                     <img 
                         src="https://cdn.discordapp.com/avatars/954595615910797323/226bb034f9aed897b874a5bba99427aa.webp?size=160" 
                         alt="Server's Avatar" 
@@ -72,60 +65,58 @@
                 </div>
             </div>
 
-            <!-- Profile Info -->
             <h1 class="text-2xl font-bold text-white tracking-tight">Server</h1>
-            <p class="text-neutral-400 text-sm mt-1 max-w-[320px]">Heya! I'm a fullstack-ish dev, who mostly likes frontend coding more. You'll find me as Server on anything other then Github, there I'm ItsMeh1. I've lately been making a desktop app version of my project, Flash v4. I've also been working on groups for my project Mobify.</p>
-
-            <!-- Discord Handle (Click to Copy) -->
-            <button onclick="copyDiscordTag(this)" class="mt-4 flex items-center gap-2 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 rounded-full text-xs text-neutral-300 transition-all duration-300 hover:scale-105 active:scale-95 group" title="Click to copy Discord username">
-                <i data-lucide="message-square" class="w-3.5 h-3.5 text-brand-discord group-hover:animate-pulse"></i>
-                <span class="font-mono">Server</span>
-                <span class="text-[10px] bg-neutral-800 text-neutral-400 px-1.5 py-0.5 rounded ml-1 group-hover:text-white transition-colors duration-200">Copy</span>
-            </button>
         </section>
 
-        <!-- Skills Section -->
         <section class="bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-md rounded-3xl p-6 shadow-xl">
             <h2 class="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4 flex items-center gap-2">
                 <i data-lucide="code-2" class="w-4 h-4 text-blue-400"></i> Tech Stack & Skills
             </h2>
             
-            <!-- Skills grid containing beautiful interactive vectors -->
             <div class="grid grid-cols-4 gap-4">
                 
-                <!-- HTML5 (Official Brand Logo) -->
                 <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-orange-500/40 transition-all duration-300">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
                     <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">HTML5</span>
                 </div>
 
-                <!-- CSS3 (Official Brand Logo) -->
                 <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-blue-500/40 transition-all duration-300">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="CSS3" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
                     <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">CSS3</span>
                 </div>
 
-                <!-- JavaScript (Official JS Yellow Block) -->
                 <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-yellow-500/40 transition-all duration-300">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" class="w-10 h-10 object-contain rounded-lg transition-transform duration-300 group-hover:scale-110" />
                     <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">JavaScript</span>
                 </div>
 
-                <!-- TypeScript (Official TS Blue Block) -->
                 <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-blue-400/40 transition-all duration-300">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript" class="w-10 h-10 object-contain rounded-lg transition-transform duration-300 group-hover:scale-110" />
                     <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">TypeScript</span>
                 </div>
 
-                <!-- Lua (Official Moon & Planet System) -->
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-green-500/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Node.js</span>
+                </div>
+
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-cyan-400/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg" alt="Electron" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Electron JS</span>
+                </div>
+
                 <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-indigo-500/40 transition-all duration-300">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/lua/lua-original.svg" alt="Lua" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
                     <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Lua</span>
                 </div>
 
-                <!-- Luau (Gradient Infinity Engine Loop) -->
-                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-cyan-400/40 transition-all duration-300">
-                    <svg class="w-10 h-10 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-orange-400/40 transition-all duration-300">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="Firebase" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
+                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Firebase BaaS</span>
+                </div>
+
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-cyan-400/40 transition-all duration-300 col-span-2 sm:col-span-1">
+                    <svg class="w-10 h-10 mx-auto transition-transform duration-300 group-hover:scale-110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="64" height="64" rx="14" fill="#0A0F1D"/>
                         <path d="M18 40C15 34 15 25 24 19C33 13 43 16 46 22C49 28 44 37 34 42C24 47 15 43 12 36C9 29 14 20 22 16" stroke="#199EE2" stroke-width="5" stroke-linecap="round" fill="none"/>
                         <circle cx="46" cy="22" r="3.5" fill="#00A2FF"/>
@@ -133,9 +124,8 @@
                     <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Luau (Roblox Engine)</span>
                 </div>
 
-                <!-- Railway (Modern Cloud Track Rails) -->
-                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-neutral-200/40 transition-all duration-300">
-                    <svg class="w-10 h-10 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-neutral-200/40 transition-all duration-300 col-span-2 sm:col-span-1">
+                    <svg class="w-10 h-10 mx-auto transition-transform duration-300 group-hover:scale-110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="64" height="64" rx="14" fill="#0B0D0E"/>
                         <line x1="18" y1="46" x2="46" y2="18" stroke="#F43F5E" stroke-width="7" stroke-linecap="round"/>
                         <line x1="28" y1="46" x2="46" y2="28" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
@@ -143,89 +133,66 @@
                     <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Railway Cloud</span>
                 </div>
 
-                <!-- Firebase (Three-layered isometric fire flame) -->
-                <div class="group relative flex flex-col items-center justify-center p-3.5 bg-neutral-900/60 border border-neutral-800/50 rounded-2xl hover:bg-neutral-800/40 hover:border-orange-400/40 transition-all duration-300">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="Firebase" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110" />
-                    <span class="absolute -bottom-8 bg-neutral-900 border border-neutral-800 text-white text-[10px] px-2 py-0.5 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10 shadow-lg">Firebase BaaS</span>
-                </div>
-
             </div>
         </section>
 
-        <!-- Projects Section -->
         <section class="flex flex-col gap-3">
             <h2 class="text-xs font-bold uppercase tracking-widest text-neutral-400 px-2 flex items-center gap-2">
                 <i data-lucide="folder-git-2" class="w-4 h-4 text-purple-400"></i> Featured Projects
             </h2>
 
-            <!-- Dynamic Projects Container -->
             <div id="projectsContainer" class="flex flex-col gap-3">
-                <!-- Project cards will be dynamically generated here by JavaScript -->
-            </div>
+                </div>
         </section>
 
-        <!-- Dynamic Detailed View Modal (Global Dialog) -->
         <dialog id="projectModal" class="bg-transparent backdrop:bg-neutral-950/80 backdrop:backdrop-blur-md p-4 w-full max-w-[480px] outline-none border-none">
             <div class="bg-neutral-900 border border-neutral-800 rounded-3xl p-6 shadow-2xl relative flex flex-col gap-5 text-neutral-200 overflow-hidden">
                 
-                <!-- Background ambient styling for modal context -->
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
-                <!-- Header block -->
                 <div class="flex items-start justify-between">
                     <div class="flex items-center gap-3">
                         <div id="modalIconContainer" class="w-10 h-10 rounded-xl flex items-center justify-center border">
-                            <!-- Dynamic Icon Inserts Here -->
-                        </div>
+                            </div>
                         <div>
                             <h3 id="modalTitle" class="text-lg font-bold text-white">Project Title</h3>
                             <p id="modalCategory" class="text-xs text-neutral-400 font-medium">Infrastructure</p>
                         </div>
                     </div>
-                    <!-- Close Button -->
                     <button onclick="closeModal()" class="p-1.5 rounded-xl bg-neutral-800 border border-neutral-700/60 hover:bg-neutral-700 text-neutral-400 hover:text-white transition-all duration-200">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
 
-                <!-- Content Area -->
                 <div class="flex flex-col gap-4">
                     <p id="modalDescription" class="text-neutral-300 text-sm leading-relaxed">
                         Detailed explanation of the project setup.
                     </p>
 
-                    <!-- Tech Badges Container -->
                     <div>
                         <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-bold block mb-2">Built With</span>
                         <div id="modalTechStack" class="flex flex-wrap gap-2">
-                            <!-- Badges dynamic insertion -->
-                        </div>
+                            </div>
                     </div>
 
-                    <!-- Highlight Features -->
                     <div class="bg-neutral-950/50 border border-neutral-800/80 rounded-2xl p-4">
                         <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-bold block mb-2">Key Specs</span>
                         <ul id="modalFeatures" class="text-xs text-neutral-300 space-y-2">
-                            <!-- List items dynamic insertion -->
-                        </ul>
+                            </ul>
                     </div>
                 </div>
 
-                <!-- Actions Footer (Dynamically generated links) -->
                 <div id="modalActions" class="flex flex-wrap items-center gap-3 mt-2">
-                    <!-- Link buttons inserted here -->
-                </div>
+                    </div>
 
             </div>
         </dialog>
 
-        <!-- Footer / Copy notification toast dynamic spot -->
         <footer class="text-center text-[11px] text-neutral-600 mt-4 flex flex-col items-center gap-2">
-            <span>Check me out on discord!</span>
+            <span>Check me out on discord</span>
             <span>&copy; 2026 Server. All rights reserved.</span>
         </footer>
 
-        <!-- Micro UI Notification Toast -->
         <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-neutral-900 border border-neutral-800 px-4 py-2.5 rounded-full text-xs text-neutral-200 shadow-2xl flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 translate-y-2 z-50">
             <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
             <span id="toastMessage">Copied to clipboard!</span>
@@ -233,7 +200,6 @@
 
     </main>
 
-    <!-- App JavaScript Logic -->
     <script>
         // Initialize beautiful Lucide icons
         lucide.createIcons();
@@ -247,19 +213,16 @@
                 colorClass: "bg-blue-500/10 text-blue-400 border-blue-500/20",
                 iconHoverClass: "group-hover:bg-blue-500/20 group-hover:text-blue-300",
                 titleHoverClass: "group-hover:text-blue-400",
-                description: "Latest Flash Proxy that serves games, messaging, browsing, videos, and movies. Available as an App.",
+                description: "Latest Flash web version that serves games, messaging, browsing, videos, and movies. Available as an App.",
                 tech: ["HTML", "Javascript", "Hostable on Railway", "Electron JS"],
                 features: [
-                    "⚡ Extremely fast browsing via Chronium",
+                    "⚡ Extremely fast",
                     "🎮 Games and Fun, Guaranteed",
                     "🔒 Keeps you and your information safe",
                     "📈 Updates all the time!"
                 ],
-                // Add unlimited dynamic links here! Set primary to true to make it white and highlighted.
                 links: [
-                    { label: "Launch Live", url: "#", icon: "external-link", primary: true },
-                    { label: "Download App", url: "#", icon: "download", primary: false },
-                    { label: "Docs", url: "#", icon: "book", primary: false }
+                    { label: "Launch Live", url: "https://itsmeh1.github.io/flashv4codedump", icon: "external-link", primary: true }
                 ]
             },
             mobify: {
@@ -278,7 +241,28 @@
                     "🔨 Often Maintenence, User Verification and Profiles, & Active Moderation"
                 ],
                 links: [
-                    { label: "Sign Up", url: "https://itsmeh1.gihtub.io/Mobify", icon: "external-link", primary: true }
+                    { label: "Sign Up", url: "https://itsmeh1.github.io/Mobify", icon: "external-link", primary: true }
+                ]
+            },
+            theflashproject: {
+                title: "The Flash Project",
+                category: "Browser",
+                icon: "globe",
+                colorClass: "bg-purple-500/10 text-yellow-400 border-yellow-500/20",
+                iconHoverClass: "group-hover:bg-yellow-500/20 group-hover:text-yellow-300",
+                titleHoverClass: "group-hover:text-yellow-400",
+                description: "The Flash Project is a fast, minimalist desktop browser built to remove internet clutter. It has user profiles to keep your sessions separate, customizable themes, a variety of settings, and a built-in AI sidebar companion to help you on the fly.",
+                tech: ["Javascript", "CSS", "HTML", "Electron", "Node.js"],
+                features: [
+                    "🌍 Browse the web",
+                    "🎮 Play the games you love",
+                    "🎥 Watch Movies & TV",
+                    "📞 Chat with the people you know",
+                    "🎉 Constant Updates"
+                ],
+                links: [
+                    { label: "Download for MacOS", url: "https://github.com/ItsMeh1/itsmeh1.github.io/releases/download/TheFlashProjectv4.2.1/TheFlashProject4.2.1.dmg", icon: "download", primary: true },
+                    { label: "Release Info", url: "https://github.com/ItsMeh1/itsmeh1.github.io/releases/tag/TheFlashProjectv4.2.1", icon: "book", primary: false}
                 ]
             }
         };
@@ -299,7 +283,6 @@
             projectsContainer.innerHTML = Object.entries(projectData).map(([id, data]) => `
                 <button onclick="openProjectModal('${id}')" class="text-left w-full bg-neutral-900/40 border border-neutral-800/80 hover:border-neutral-700/80 backdrop-blur-md rounded-2xl p-5 flex items-center justify-between group transition-all duration-300 hover:translate-x-1 hover:shadow-lg active:scale-[0.99]">
                     <div class="flex items-center gap-4 w-full min-w-0">
-                        <!-- Added 'shrink-0' to keep the icon square under any text conditions -->
                         <div class="w-12 h-12 rounded-xl flex items-center justify-center border transition-colors duration-300 shrink-0 ${data.colorClass} ${data.iconHoverClass}">
                             <i data-lucide="${data.icon}" class="w-6 h-6"></i>
                         </div>
@@ -312,7 +295,6 @@
                 </button>
             `).join('');
             
-            // Re-initialize Lucide icons for the newly injected HTML
             lucide.createIcons(); 
         }
 
@@ -324,21 +306,17 @@
             const data = projectData[projectId];
             if (!data) return;
 
-            // Update content elements
             modalTitle.textContent = data.title;
             modalCategory.textContent = data.category;
             modalDescription.textContent = data.description;
 
-            // Render themed icon dynamically
             modalIconContainer.className = `w-10 h-10 rounded-xl flex items-center justify-center border ${data.colorClass}`;
             modalIconContainer.innerHTML = `<i data-lucide="${data.icon}" class="w-5 h-5"></i>`;
 
-            // Render tech stack badges
             modalTechStack.innerHTML = data.tech.map(techName => {
                 return `<span class="px-2.5 py-1 bg-neutral-800 border border-neutral-700/60 rounded-lg text-[11px] text-neutral-300 font-semibold flex items-center gap-1">${techName}</span>`;
             }).join('');
 
-            // Render specification items
             modalFeatures.innerHTML = data.features.map(feature => {
                 return `<li class="flex items-start gap-2">
                     <span class="text-neutral-500 mt-0.5">•</span>
@@ -346,7 +324,6 @@
                 </li>`;
             }).join('');
 
-            // Dynamically build action buttons from data.links array
             if (data.links && data.links.length > 0) {
                 modalActions.innerHTML = data.links.map(link => {
                     if (link.primary) {
@@ -361,25 +338,20 @@
                 }).join('');
                 modalActions.style.display = 'flex';
             } else {
-                modalActions.innerHTML = ''; // Clear if no links provided
+                modalActions.innerHTML = '';
                 modalActions.style.display = 'none';
             }
 
-            // Show standard dialog (uses seamless polyfill built-in desktop/mobile web views)
             modal.showModal();
-            lucide.createIcons(); // Reactivate icons nested inside modal (including the new dynamically added button icons)
-            
-            // Lock background scrolling
+            lucide.createIcons();
             document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             modal.close();
-            // Unlock scrolling
             document.body.style.overflow = '';
         }
 
-        // Close dialog on clicking outside the content window
         modal.addEventListener('click', (event) => {
             const rect = modal.getBoundingClientRect();
             const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
@@ -389,11 +361,8 @@
             }
         });
 
-        // Quick Clipboard Utility (Fallback implementation for iframe sandbox security restrictions)
         function copyDiscordTag(buttonElement) {
             const textToCopy = "Server";
-            
-            // Modern copy mechanism with legacy fallback sequence
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(textToCopy)
                     .then(() => showToast("Discord username copied!"))
@@ -406,7 +375,7 @@
         function fallbackCopy(text) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
-            textArea.style.position = "fixed";  // Avoid scrolling to bottom
+            textArea.style.position = "fixed";
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
@@ -419,18 +388,14 @@
             document.body.removeChild(textArea);
         }
 
-        // Custom notification toast controller
         let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
             
             toastMessage.textContent = message;
-            
-            // Clear prior timeouts to prevent flicker
             clearTimeout(toastTimeout);
             
-            // Activate toast animation sequence
             toast.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
             toast.classList.add('opacity-100', 'translate-y-0');
             
