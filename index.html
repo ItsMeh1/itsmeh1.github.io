@@ -28,7 +28,7 @@
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
         
         /* Custom scrollbar for premium feel */
         ::-webkit-scrollbar {
@@ -50,6 +50,7 @@
 
     <main class="w-full max-w-[500px] flex flex-col gap-6 animate-fade-in">
         
+        <!-- Profile Header Section -->
         <section class="bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-md rounded-3xl p-6 flex flex-col items-center text-center relative overflow-hidden shadow-xl">
             <div class="absolute -top-24 -left-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -58,7 +59,7 @@
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
                 <div class="relative w-24 h-24 rounded-full overflow-hidden bg-neutral-950 border-2 border-neutral-800 flex items-center justify-center">
                     <img 
-                        src="https://cdn.discordapp.com/avatars/954595615910797323/226bb034f9aed897b874a5bba99427aa.webp?size=160?.cnn.com" 
+                        src="https://cdn.discordapp.com/avatars/954595615910797323/226bb034f9aed897b874a5bba99427aa.webp?size=160" 
                         alt="Server's Avatar" 
                         class="w-full h-full object-cover"
                         onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Server&backgroundColor=3b82f6'"
@@ -69,6 +70,7 @@
             <h1 class="text-2xl font-bold text-white tracking-tight">Server</h1>
         </section>
 
+        <!-- Tech Stack section -->
         <section class="bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-md rounded-3xl p-6 shadow-xl">
             <h2 class="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4 flex items-center gap-2">
                 <i data-lucide="code-2" class="w-4 h-4 text-blue-400"></i> Tech Stack & Skills
@@ -137,16 +139,19 @@
             </div>
         </section>
 
+        <!-- Projects list section -->
         <section class="flex flex-col gap-3">
             <h2 class="text-xs font-bold uppercase tracking-widest text-neutral-400 px-2 flex items-center gap-2">
                 <i data-lucide="folder-git-2" class="w-4 h-4 text-purple-400"></i> Featured Projects
             </h2>
 
             <div id="projectsContainer" class="flex flex-col gap-3">
-                </div>
+                <!-- Dynamically populated via JS -->
+            </div>
         </section>
 
-        <dialog id="projectModal" class="bg-transparent backdrop:bg-neutral-950/80 backdrop:backdrop-blur-md p-4 w-full max-w-[480px] outline-none border-none">
+        <!-- Widescreen detailed dialog window -->
+        <dialog id="projectModal" class="bg-transparent backdrop:bg-neutral-950/80 backdrop:backdrop-blur-md p-4 w-full max-w-[640px] outline-none border-none">
             <div class="bg-neutral-900 border border-neutral-800 rounded-3xl p-6 shadow-2xl relative flex flex-col gap-5 text-neutral-200 overflow-hidden">
                 
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -154,10 +159,18 @@
                 <div class="flex items-start justify-between">
                     <div class="flex items-center gap-3">
                         <div id="modalIconContainer" class="w-10 h-10 rounded-xl flex items-center justify-center border">
-                            </div>
+                            <!-- Icon dynamic -->
+                        </div>
                         <div>
                             <h3 id="modalTitle" class="text-lg font-bold text-white">Project Title</h3>
-                            <p id="modalCategory" class="text-xs text-neutral-400 font-medium">Infrastructure</p>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <p id="modalCategory" class="text-xs text-neutral-400 font-medium">Category</p>
+                                <!-- License Badge -->
+                                <div id="modalLicenseContainer" class="hidden items-center gap-1 bg-neutral-800/60 border border-neutral-700/50 px-1.5 py-0.5 rounded text-[10px] text-neutral-400">
+                                    <i data-lucide="scale" class="w-3 h-3"></i>
+                                    <span id="modalLicenseText"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <button onclick="closeModal()" class="p-1.5 rounded-xl bg-neutral-800 border border-neutral-700/60 hover:bg-neutral-700 text-neutral-400 hover:text-white transition-all duration-200">
@@ -165,6 +178,12 @@
                     </button>
                 </div>
 
+                <!-- Dynamic Multiple Notices Block (Rendered with multiple modes) -->
+                <div id="modalNoticesContainer" class="hidden flex flex-col gap-2">
+                    <!-- Notifications will append dynamically here -->
+                </div>
+
+                <!-- Description & Features -->
                 <div class="flex flex-col gap-4">
                     <p id="modalDescription" class="text-neutral-300 text-sm leading-relaxed">
                         Detailed explanation of the project setup.
@@ -173,24 +192,42 @@
                     <div>
                         <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-bold block mb-2">Built With</span>
                         <div id="modalTechStack" class="flex flex-wrap gap-2">
-                            </div>
+                            <!-- Badges dynamic -->
+                        </div>
                     </div>
 
                     <div class="bg-neutral-950/50 border border-neutral-800/80 rounded-2xl p-4">
                         <span class="text-[10px] uppercase tracking-wider text-neutral-500 font-bold block mb-2">Key Specs</span>
                         <ul id="modalFeatures" class="text-xs text-neutral-300 space-y-2">
-                            </ul>
+                            <!-- Features dynamic -->
+                        </ul>
                     </div>
                 </div>
 
-                <div id="modalActions" class="flex flex-wrap items-center gap-3 mt-2">
+                <!-- Dynamically Rendered Link Area -->
+                <div class="flex flex-col gap-2 mt-2 w-full">
+                    <!-- Primary Main Action Row -->
+                    <div id="modalMainActions" class="flex items-center gap-3 w-full">
+                        <!-- Main primary link buttons go here -->
                     </div>
+                    
+                    <!-- Extended Hidden Links Area (For non-primary links) -->
+                    <div id="extendedLinks" class="hidden flex flex-col gap-2 w-full pt-1">
+                        <!-- Additional non-primary links are injected here -->
+                    </div>
+
+                    <!-- Show More/Less Trigger Button -->
+                    <button id="toggleLinksBtn" onclick="toggleExtendedLinks()" class="hidden w-full py-2.5 px-4 bg-neutral-800 border border-neutral-700/60 hover:bg-neutral-750 text-neutral-300 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all duration-200">
+                        <span id="toggleText">Show More</span>
+                        <i id="toggleChevron" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                    </button>
+                </div>
 
             </div>
         </dialog>
 
         <footer class="text-center text-[11px] text-neutral-600 mt-4 flex flex-col items-center gap-2">
-            <span>Check me out on discord</span>
+            <span>Check me out on discord!</span>
             <span>&copy; 2026 Server. All rights reserved.</span>
         </footer>
 
@@ -202,10 +239,27 @@
     </main>
 
     <script>
-        // Initialize beautiful Lucide icons
-        lucide.createIcons();
+        // Mapping styles for Alert Modes (Warning, Note, Error, Checkmark/Success)
+        const noticeStyles = {
+            warning: {
+                icon: 'alert-triangle',
+                containerClass: 'bg-orange-500/10 border-orange-500/20 text-orange-400'
+            },
+            note: {
+                icon: 'info',
+                containerClass: 'bg-blue-500/10 border-blue-500/20 text-blue-400'
+            },
+            error: {
+                icon: 'alert-circle',
+                containerClass: 'bg-red-500/10 border-red-500/20 text-red-400'
+            },
+            checkmark: {
+                icon: 'check-circle-2',
+                containerClass: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+            }
+        };
 
-        // Project detailed configurations
+        // Project configurations
         const projectData = {
             flash: {
                 title: "Flash v4",
@@ -215,12 +269,17 @@
                 iconHoverClass: "group-hover:bg-blue-500/20 group-hover:text-blue-300",
                 titleHoverClass: "group-hover:text-blue-400",
                 description: "Latest Flash web version that serves games, messaging, browsing, videos, and movies. Available as an App.",
+                longDescription: "Flash v4 represents the next generation of our browser platform. Built to integrate natively with robust web APIs, it brings you games, secure messaging, and multimedia consumption all into one highly optimized hub.",
                 tech: ["HTML", "Javascript", "Hostable on Railway", "Electron JS"],
                 features: [
                     "⚡ Extremely fast",
                     "🎮 Games and Fun, Guaranteed",
                     "🔒 Keeps you and your information safe",
                     "📈 Updates all the time!"
+                ],
+                locked: false,
+                notices: [
+                    { type: "error", text: "Browser is down" }
                 ],
                 links: [
                     { label: "Launch Live", url: "https://itsmeh1.github.io/flashv4codedump", icon: "external-link", primary: true }
@@ -234,15 +293,20 @@
                 iconHoverClass: "group-hover:bg-purple-500/20 group-hover:text-purple-300",
                 titleHoverClass: "group-hover:text-purple-400",
                 description: "A simple social media app thats included in Flash v4.",
+                longDescription: "Mobify is a fully secure, dynamic networking platform embedded right into the Flash environment. Keep in touch with customizable profiles, active moderation layers, and instant room synchronization.",
                 tech: ["Javascript", "CSS", "HTML", "Firebase", "Github"],
                 features: [
                     "🛡️ Rate Limiting Technology",
                     "👥 Private & Public Groups for Messaging",
                     "✉️ Public Posts",
-                    "🔨 Often Maintenence, User Verification and Profiles, & Active Moderation"
+                    "🔨 Often Maintenance, User Verification and Profiles, & Active Moderation"
                 ],
+                locked: false, // Demoing dynamic split in links list
+                releaseDate: "June 2026",
+                notices: [
+                    { type: "warning", text: "Migrating to a new system for groups & profiles. There will be bugs." }                ],
                 links: [
-                    { label: "Sign Up", url: "https://itsmeh1.github.io/Mobify", icon: "external-link", primary: true }
+                    { label: "Sign Up Today", url: "https://itsmeh1.github.io/Mobify", icon: "user-plus", primary: true }
                 ]
             },
             theflashproject: {
@@ -253,23 +317,31 @@
                 iconHoverClass: "group-hover:bg-yellow-500/20 group-hover:text-yellow-300",
                 titleHoverClass: "group-hover:text-yellow-400",
                 description: "The Flash Project is a fast, minimalist desktop browser built to remove internet clutter. It has user profiles to keep your sessions separate, customizable themes, a variety of settings, and a built-in AI sidebar companion to help you on the fly.",
+                longDescription: "The Flash Project is a fast, minimalist desktop browser built to remove internet clutter. Designed purely for efficiency, it allows for multiple user profiles to keep your sessions completely separate. Along with heavily customizable themes, deep settings panels, and an integrated AI sidebar companion, it's a completely reimagined way to experience the web.",
                 tech: ["Javascript", "CSS", "HTML", "Electron", "Node.js"],
+                license: "MIT",
                 features: [
                     "🌍 Browse the web",
                     "🎮 Play the games you love",
                     "🎥 Watch Movies & TV",
                     "📞 Chat with the people you know",
                     "🎉 Constant Updates",
-                    "👾 Doesn't work? Run this in Terminal after installing to applications: xattr -cr /Applications/The\ Flash\ Project.app"
+                    "👾 Doesn't work? Run this in Terminal after installing to applications: xattr -cr /Applications/The\\ Flash\\ Project.app"
+                ],
+                locked: false,
+                releaseDate: "Mid-June 2026",
+                notices: [
+                    { type: "warning", text: "Requires bypass for macOS Gatekeeper after installing (see instructions in Key Specs)." },
+                    { type: "note", text: "iOS and APK Versions are still being made." }
                 ],
                 links: [
-                    { label: "Download for MacOS", url: "https://github.com/ItsMeh1/itsmeh1.github.io/releases/download/TheFlashProjectv4.7.1/TheFlashProject4.7.1.dmg", icon: "download", primary: true },
+                    { label: "Download ZIP", url: "https://github.com/ItsMeh1/itsmeh1.github.io/releases/download/TheFlashProjectv4.7.1-ZIP/The.Flash.Project.zip", icon: "download", primary: true },
                     { label: "Release Info", url: "https://github.com/ItsMeh1/itsmeh1.github.io/releases/tag/TheFlashProjectv4.2.1", icon: "book", primary: false}
                 ]
             }
         };
 
-        // Modal elements cache
+        // Cache elements
         const modal = document.getElementById('projectModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalCategory = document.getElementById('modalCategory');
@@ -277,31 +349,76 @@
         const modalIconContainer = document.getElementById('modalIconContainer');
         const modalTechStack = document.getElementById('modalTechStack');
         const modalFeatures = document.getElementById('modalFeatures');
-        const modalActions = document.getElementById('modalActions');
+        const modalMainActions = document.getElementById('modalMainActions');
+        const extendedLinks = document.getElementById('extendedLinks');
+        const toggleLinksBtn = document.getElementById('toggleLinksBtn');
+        const toggleText = document.getElementById('toggleText');
+        const toggleChevron = document.getElementById('toggleChevron');
+        const modalNoticesContainer = document.getElementById('modalNoticesContainer');
+        const modalLicenseContainer = document.getElementById('modalLicenseContainer');
+        const modalLicenseText = document.getElementById('modalLicenseText');
         const projectsContainer = document.getElementById('projectsContainer');
 
-        // Dynamically render project cards
+        // Dynamically render project cards safely
         function renderProjectCards() {
-            projectsContainer.innerHTML = Object.entries(projectData).map(([id, data]) => `
-                <button onclick="openProjectModal('${id}')" class="text-left w-full bg-neutral-900/40 border border-neutral-800/80 hover:border-neutral-700/80 backdrop-blur-md rounded-2xl p-5 flex items-center justify-between group transition-all duration-300 hover:translate-x-1 hover:shadow-lg active:scale-[0.99]">
-                    <div class="flex items-center gap-4 w-full min-w-0">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center border transition-colors duration-300 shrink-0 ${data.colorClass} ${data.iconHoverClass}">
+            if (!projectsContainer) return;
+
+            projectsContainer.innerHTML = Object.entries(projectData).map(([id, data]) => {
+                const isLocked = data.locked === true;
+                
+                // Card styling modifier
+                const cardClasses = isLocked 
+                    ? "text-left w-full bg-neutral-900/20 border border-neutral-800/40 backdrop-blur-md rounded-2xl p-5 flex items-center justify-between opacity-60 cursor-not-allowed group" 
+                    : "text-left w-full bg-neutral-900/40 border border-neutral-800/80 hover:border-neutral-700/80 backdrop-blur-md rounded-2xl p-5 flex items-center justify-between group transition-all duration-300 hover:translate-x-1 hover:shadow-lg active:scale-[0.99]";
+                
+                // Beautiful display of release date right on the card if locked
+                const rightSideUI = isLocked
+                    ? `<div class="flex items-center gap-1.5 px-2.5 py-1 bg-neutral-950/50 border border-neutral-800 rounded-lg text-xs font-semibold text-neutral-400 shrink-0"><i data-lucide="lock" class="w-3.5 h-3.5 text-orange-400"></i> ${data.releaseDate || 'Coming Soon'}</div>`
+                    : `<i data-lucide="chevron-right" class="w-5 h-5 text-neutral-500 group-hover:text-white transition-colors duration-300 shrink-0"></i>`;
+
+                const actionOnClick = isLocked ? '' : `onclick="openProjectModal('${id}')"`;
+
+                return `
+                <button ${actionOnClick} class="${cardClasses}" ${isLocked ? 'disabled' : ''}>
+                    <div class="flex items-center gap-4 w-full min-w-0 pr-4">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center border transition-colors duration-300 shrink-0 ${data.colorClass} ${!isLocked ? data.iconHoverClass : ''}">
                             <i data-lucide="${data.icon}" class="w-6 h-6"></i>
                         </div>
                         <div class="min-w-0 flex-1">
-                            <h3 class="font-semibold text-white transition-colors duration-200 ${data.titleHoverClass}">${data.title}</h3>
+                            <h3 class="font-semibold text-white transition-colors duration-200 ${!isLocked ? data.titleHoverClass : ''}">${data.title}</h3>
                             <p class="text-neutral-400 text-xs mt-0.5 line-clamp-1">${data.description}</p>
                         </div>
                     </div>
-                    <i data-lucide="chevron-right" class="w-5 h-5 text-neutral-500 group-hover:text-white transition-colors duration-300 shrink-0"></i>
+                    ${rightSideUI}
                 </button>
-            `).join('');
+                `;
+            }).join('');
             
             lucide.createIcons(); 
         }
 
-        // Initial render execution
-        renderProjectCards();
+        // Wait for DOM to be fully loaded
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProjectCards();
+            lucide.createIcons();
+            startTrollLoop();
+        });
+
+        // Toggle collapsible dynamic links
+        function toggleExtendedLinks() {
+            if (!extendedLinks || !toggleText || !toggleChevron) return;
+            const isCollapsed = extendedLinks.classList.contains('hidden');
+
+            if (isCollapsed) {
+                extendedLinks.classList.remove('hidden');
+                toggleText.textContent = "Show Less";
+                toggleChevron.style.transform = "rotate(180deg)";
+            } else {
+                extendedLinks.classList.add('hidden');
+                toggleText.textContent = "Show More";
+                toggleChevron.style.transform = "rotate(0deg)";
+            }
+        }
 
         // Modal trigger functions
         function openProjectModal(projectId) {
@@ -310,10 +427,47 @@
 
             modalTitle.textContent = data.title;
             modalCategory.textContent = data.category;
-            modalDescription.textContent = data.description;
+            
+            modalDescription.innerHTML = data.longDescription || data.description;
 
-            modalIconContainer.className = `w-10 h-10 rounded-xl flex items-center justify-center border ${data.colorClass}`;
+            modalIconContainer.className = `w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 ${data.colorClass}`;
             modalIconContainer.innerHTML = `<i data-lucide="${data.icon}" class="w-5 h-5"></i>`;
+
+            // Reset links collapse state
+            if (extendedLinks) {
+                extendedLinks.classList.add('hidden');
+                extendedLinks.innerHTML = '';
+            }
+            if (toggleText) toggleText.textContent = "Show More";
+            if (toggleChevron) toggleChevron.style.transform = "rotate(0deg)";
+            if (toggleLinksBtn) toggleLinksBtn.classList.add('hidden');
+
+            // Render Dynamic Multiple Notice Blocks
+            if (data.notices && data.notices.length > 0) {
+                modalNoticesContainer.innerHTML = data.notices.map(notice => {
+                    const style = noticeStyles[notice.type] || noticeStyles.note;
+                    return `
+                        <div class="border rounded-xl p-3 text-xs flex items-start gap-2.5 ${style.containerClass}">
+                            <i data-lucide="${style.icon}" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                            <span class="leading-relaxed font-medium">${notice.text}</span>
+                        </div>
+                    `;
+                }).join('');
+                modalNoticesContainer.classList.remove('hidden');
+            } else {
+                modalNoticesContainer.innerHTML = '';
+                modalNoticesContainer.classList.add('hidden');
+            }
+
+            // Render License Badges
+            if (data.license) {
+                modalLicenseText.textContent = data.license + " License";
+                modalLicenseContainer.classList.remove('hidden');
+                modalLicenseContainer.classList.add('flex');
+            } else {
+                modalLicenseContainer.classList.add('hidden');
+                modalLicenseContainer.classList.remove('flex');
+            }
 
             modalTechStack.innerHTML = data.tech.map(techName => {
                 return `<span class="px-2.5 py-1 bg-neutral-800 border border-neutral-700/60 rounded-lg text-[11px] text-neutral-300 font-semibold flex items-center gap-1">${techName}</span>`;
@@ -326,22 +480,34 @@
                 </li>`;
             }).join('');
 
+            // Build dynamic collapsible link buttons grouped by primary parameter
             if (data.links && data.links.length > 0) {
-                modalActions.innerHTML = data.links.map(link => {
-                    if (link.primary) {
-                        return `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-4 bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200">
-                                    <i data-lucide="${link.icon}" class="w-3.5 h-3.5"></i> ${link.label}
-                                </a>`;
-                    } else {
-                        return `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="py-2.5 px-4 bg-neutral-800 border border-neutral-700 hover:bg-neutral-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200">
-                                    <i data-lucide="${link.icon}" class="w-3.5 h-3.5"></i> ${link.label}
-                                </a>`;
-                    }
-                }).join('');
-                modalActions.style.display = 'flex';
+                const primaryLinks = data.links.filter(link => link.primary === true);
+                const secondaryLinks = data.links.filter(link => link.primary !== true);
+
+                // Render main primary actions
+                if (primaryLinks.length > 0) {
+                    modalMainActions.innerHTML = primaryLinks.map(link => `
+                        <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-4 bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200">
+                            <i data-lucide="${link.icon}" class="w-3.5 h-3.5"></i> ${link.label}
+                        </a>
+                    `).join('');
+                } else {
+                    modalMainActions.innerHTML = '';
+                }
+
+                // If non-primary links exist, put them in the expandable container
+                if (secondaryLinks.length > 0) {
+                    extendedLinks.innerHTML = secondaryLinks.map(link => `
+                        <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 bg-neutral-800 border border-neutral-700 hover:bg-neutral-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200">
+                            <i data-lucide="${link.icon}" class="w-3.5 h-3.5"></i> ${link.label}
+                        </a>
+                    `).join('');
+                    
+                    if (toggleLinksBtn) toggleLinksBtn.classList.remove('hidden');
+                }
             } else {
-                modalActions.innerHTML = '';
-                modalActions.style.display = 'none';
+                modalMainActions.innerHTML = '';
             }
 
             modal.showModal();
@@ -354,6 +520,7 @@
             document.body.style.overflow = '';
         }
 
+        // Close dialog on backdrop click
         modal.addEventListener('click', (event) => {
             const rect = modal.getBoundingClientRect();
             const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
@@ -385,7 +552,7 @@
                 document.execCommand('copy');
                 showToast("Discord username copied!");
             } catch (err) {
-                showToast("Failed to copy! Simply copy manual.");
+                showToast("Failed to copy! Simply copy manually.");
             }
             document.body.removeChild(textArea);
         }
@@ -406,59 +573,34 @@
                 toast.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
             }, 3000);
         }
+
         const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
         async function trollTitle() {
             for (let i = 0; i < 13; i++) {
-                if (i === 1) {
-                    document.title = "S"
-                }
-                if (i === 2) {
-                    document.title = "Se"
-                }
-                if (i === 3) {
-                    document.title = "Ser"
-                }
-                if (i === 4) {
-                    document.title = "Serv"
-                }
-                if (i === 5) {
-                    document.title = "Serve"
-                }
-                if (i === 6) {
-                    document.title = "Server"
-                }
-                if (i === 7) {
-                    document.title = "Server "
-                }
-                if (i === 8) {
-                    document.title = "Server 6"
-                }
-                if (i === 9) {
-                    document.title = "Server 67"
-                }
-                if (i === 10) {
-                    document.title = "Server 6"
-                }
-                if (i === 11) {
-                    document.title = "Server "
-                }
-                if (i === 12) {
-                    document.title = "Server"
-                }
+                if (i === 1) document.title = "S";
+                if (i === 2) document.title = "Se";
+                if (i === 3) document.title = "Ser";
+                if (i === 4) document.title = "Serv";
+                if (i === 5) document.title = "Serve";
+                if (i === 6) document.title = "Server";
+                if (i === 7) document.title = "Server ";
+                if (i === 8) document.title = "Server 6";
+                if (i === 9) document.title = "Server 67";
+                if (i === 10) document.title = "Server 6";
+                if (i === 11) document.title = "Server ";
+                if (i === 12) document.title = "Server";
 
-                await wait(1000)
+                await wait(1000);
             }
         }
 
         async function startTrollLoop() {
             for (let i = 0; i < 150; i++) {
-            trollTitle();
-            await wait(14000); // Waits 14 seconds before moving to the next iteration
+                trollTitle();
+                await wait(14000); 
             }
         }
-
-        startTrollLoop();
     </script>
 </body>
 </html>
