@@ -1,0 +1,4 @@
+{
+  "secret1": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Secret Project 1</title><style>body { background: #1a1a1a; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }</style></head><body><div style=\"text-align: center;\"><h1>Top Secret Project 1</h1><p>Welcome to the hidden area!</p></div></body></html>",
+  "demo2": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Secret Project 2</title><style>body { background: #002244; color: #eee; font-family: monospace; padding: 2rem; }</style></head><body><h1>Project: Code Red</h1><p>This is a classified environment.</p></body></html>"
+}
