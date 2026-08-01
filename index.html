@@ -678,17 +678,17 @@
                     </div>
                     
                     <div id="methodSelection" class="hidden mt-4 pt-4 border-t border-white/5 animate-[fadeIn_0.4s_ease-out_forwards]">
-                        <p class="text-[9px] text-neutral-500 mb-3 text-center tracking-[0.2em]">SELECT DEPLOYMENT TARGET</p>
+                        <p class="text-[9px] text-neutral-500 mb-3 text-center tracking-[0.2em]">Where to open?</p>
                         <div class="flex gap-2">
                             <button id="openBlobBtn" class="flex-1 py-2.5 bg-black border border-neutral-800 hover:border-blue-500/50 text-white text-[10px] font-mono tracking-widest rounded-lg transition-all duration-300 flex flex-col items-center justify-center gap-1.5 group/btn relative overflow-hidden">
                                 <div class="absolute inset-0 bg-blue-500/5 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
                                 <i data-lucide="database" class="w-4 h-4 text-neutral-600 group-hover/btn:text-blue-400 transition-colors"></i> 
-                                Open with BLOB
+                                Open in a blob
                             </button>
                             <button id="openBlankBtn" class="flex-1 py-2.5 bg-black border border-neutral-800 hover:border-purple-500/50 text-white text-[10px] font-mono tracking-widest rounded-lg transition-all duration-300 flex flex-col items-center justify-center gap-1.5 group/btn relative overflow-hidden">
                                 <div class="absolute inset-0 bg-purple-500/5 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
                                 <i data-lucide="layout-template" class="w-4 h-4 text-neutral-600 group-hover/btn:text-purple-400 transition-colors"></i> 
-                                Open in ABOUT:BLANK
+                                Open in about:blank
                             </button>
                         </div>
                     </div>
@@ -814,7 +814,7 @@
                         win.document.write(currentSecretHtml);
                         win.document.close();
                     } else {
-                        alert("Popup blocked! Please allow popups for this site.");
+                        alert("Popup blocked! Please allow popups for this site to launch.");
                     }
                     resetCodePanel();
                 });
