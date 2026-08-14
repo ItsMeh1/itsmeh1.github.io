@@ -662,7 +662,12 @@
   </div>
 
   <script type="module">
-    import removeBackground from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
+    import * as imgly from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
+
+const removeBackground =
+  imgly.removeBackground ||
+  imgly.imglyRemoveBackground ||
+  imgly.default;
 
     const dropzone = document.getElementById("dropzone");
     const fileInput = document.getElementById("fileInput");
