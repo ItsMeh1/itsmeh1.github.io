@@ -1,197 +1,896 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Free browser-based background remover. Drop an image, remove the background locally, and download a transparent PNG." />
-  <meta name="theme-color" content="#0b0d12" />
-  <title>Cutout — Free Background Remover</title>
-  <link rel="preconnect" href="https://esm.sh" crossorigin>
-  <link rel="preconnect" href="https://staticimgly.com" crossorigin>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+
+  <title>cutout. — remove the background</title>
+
+  <meta
+    name="description"
+    content="A chic, private, in-browser background remover."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
-    :root { color-scheme: dark; --bg:#090b10; --panel:#11151d; --panel2:#171c26; --text:#f4f7fb; --muted:#9aa4b2; --line:#273041; --accent:#8b5cf6; --accent2:#6d42e8; --good:#22c55e; }
-    * { box-sizing:border-box; }
-    html, body { margin:0; min-height:100%; background:radial-gradient(1200px 600px at 50% -150px,#1b1530 0%,var(--bg) 55%); color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    body { display:flex; justify-content:center; }
-    .shell { width:min(1120px,100%); padding:28px 18px 42px; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:28px; }
-    .brand { font-weight:800; letter-spacing:-.03em; font-size:20px; }
-    .privacy { color:var(--muted); font-size:13px; }
-    .hero { text-align:center; margin:36px auto 26px; max-width:720px; }
-    .hero h1 { margin:0; font-size:clamp(38px,6vw,64px); line-height:1; letter-spacing:-.05em; }
-    .hero p { color:var(--muted); margin:16px auto 0; font-size:17px; line-height:1.55; max-width:600px; }
-    .dropzone { border:1px dashed #3a465a; background:rgba(17,21,29,.86); border-radius:28px; padding:46px 20px; display:flex; flex-direction:column; align-items:center; gap:14px; transition:.2s ease; cursor:pointer; }
-    .dropzone:hover,.dropzone.drag { border-color:#9f7aea; background:rgba(23,18,38,.92); transform:translateY(-1px); }
-    .drop-icon { width:64px; height:64px; border-radius:18px; display:grid; place-items:center; background:linear-gradient(135deg,#8b5cf6,#5b21b6); box-shadow:0 12px 34px rgba(124,58,237,.24); }
-    .drop-icon svg { width:30px; height:30px; }
-    .dropzone strong { font-size:20px; }
-    .dropzone span { color:var(--muted); font-size:14px; }
-    .btn { border:0; border-radius:12px; padding:12px 18px; font-weight:700; cursor:pointer; color:white; background:linear-gradient(135deg,var(--accent),var(--accent2)); box-shadow:0 10px 25px rgba(109,66,232,.25); }
-    .btn:disabled { opacity:.5; cursor:not-allowed; box-shadow:none; }
-    .subtle { font-size:12px; color:#737e8f; }
-    input[type=file] { display:none; }
-    .status { margin:18px 0; display:none; }
-    .status.show { display:block; }
-    .progress { height:8px; background:#1b2230; border-radius:999px; overflow:hidden; border:1px solid #222a38; }
-    .progress > i { display:block; width:0%; height:100%; background:linear-gradient(90deg,#8b5cf6,#c084fc); transition:width .18s ease; }
-    .status-row { display:flex; justify-content:space-between; margin-bottom:10px; font-size:13px; color:var(--muted); }
-    .workspace { display:none; margin-top:24px; }
-    .workspace.show { display:block; }
-    .cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
-    .card { background:rgba(17,21,29,.9); border:1px solid var(--line); border-radius:20px; padding:14px; }
-    .card header { display:flex; justify-content:space-between; align-items:center; padding:2px 2px 12px; }
-    .card header span { font-size:13px; color:var(--muted); }
-    .preview { min-height:420px; border-radius:14px; overflow:hidden; display:grid; place-items:center; background-color:#eef2f7; background-image:linear-gradient(45deg,#d8dee7 25%,transparent 25%),linear-gradient(-45deg,#d8dee7 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d8dee7 75%),linear-gradient(-45deg,transparent 75%,#d8dee7 75%); background-size:28px 28px; background-position:0 0,0 14px,14px -14px,-14px 0; }
-    .preview img { display:block; width:100%; height:auto; max-height:620px; object-fit:contain; }
-    .original .preview { background:#f5f7fa; }
-    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
-    .btn.alt { background:#202734; box-shadow:none; border:1px solid #313c50; }
-    .btn.danger { background:#2a1c23; border:1px solid #4b2a35; box-shadow:none; }
-    .foot { text-align:center; color:#6f7989; font-size:12px; margin-top:28px; line-height:1.6; }
-    .error { color:#ffb4c0; background:#2b1820; border:1px solid #5b2a37; border-radius:14px; padding:12px 14px; font-size:13px; margin-top:16px; display:none; }
-    .error.show { display:block; }
-    @media (max-width:780px){ .cards{grid-template-columns:1fr;} .preview{min-height:300px;} .topbar{align-items:flex-start; flex-direction:column;} }
-  </style>
-</head>
-<body>
-  <main class="shell">
-    <div class="topbar"><div class="brand">CUTOUT</div><div class="privacy">Private by design · runs in your browser</div></div>
-
-    <section class="hero">
-      <h1>Remove backgrounds.<br>Keep the subject.</h1>
-      <p>Drop in an image and get a clean transparent PNG. No account, no upload queue, and no server-side image processing.</p>
-    </section>
-
-    <label class="dropzone" id="dropzone" for="fileInput" tabindex="0">
-      <div class="drop-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M5 12v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
-      </div>
-      <strong>Drop an image here</strong>
-      <span>or click to browse · JPG, PNG, WebP</span>
-      <button class="btn" id="browseBtn" type="button">Choose image</button>
-      <div class="subtle">The first image may take a little longer while the AI model loads.</div>
-    </label>
-    <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" />
-
-    <section class="status" id="status" aria-live="polite">
-      <div class="status-row"><span id="statusText">Preparing…</span><span id="statusPct">0%</span></div>
-      <div class="progress"><i id="progressBar"></i></div>
-    </section>
-    <div class="error" id="error"></div>
-
-    <section class="workspace" id="workspace">
-      <div class="cards">
-        <article class="card original"><header><strong>Original</strong><span id="originalMeta"></span></header><div class="preview"><img id="originalImg" alt="Original image preview"></div></article>
-        <article class="card"><header><strong>Transparent</strong><span>PNG output</span></header><div class="preview"><img id="resultImg" alt="Transparent image preview"></div></article>
-      </div>
-      <div class="actions">
-        <button class="btn" id="downloadBtn">Download transparent PNG</button>
-        <button class="btn alt" id="newBtn">Choose another image</button>
-      </div>
-    </section>
-
-    <div class="foot">Built with <a href="https://github.com/imgly/background-removal-js" target="_blank" rel="noreferrer" style="color:#bda5ff">@imgly/background-removal</a>. Image processing happens locally in your browser.</div>
-  </main>
-
-  <script type="module">
-    import removeBackground from 'https://esm.sh/@imgly/background-removal@1.7.0?bundle';
-
-    const MODEL_PATH = 'https://staticimgly.com/@imgly/background-removal-data/1.7.0/';
-    const fileInput = document.querySelector('#fileInput');
-    const dropzone = document.querySelector('#dropzone');
-    const browseBtn = document.querySelector('#browseBtn');
-    const status = document.querySelector('#status');
-    const statusText = document.querySelector('#statusText');
-    const statusPct = document.querySelector('#statusPct');
-    const progressBar = document.querySelector('#progressBar');
-    const errorBox = document.querySelector('#error');
-    const workspace = document.querySelector('#workspace');
-    const originalImg = document.querySelector('#originalImg');
-    const resultImg = document.querySelector('#resultImg');
-    const originalMeta = document.querySelector('#originalMeta');
-    const downloadBtn = document.querySelector('#downloadBtn');
-    const newBtn = document.querySelector('#newBtn');
-
-    let resultBlob = null;
-    let resultUrl = null;
-    let sourceUrl = null;
-
-    function resetUI() {
-      errorBox.classList.remove('show');
-      status.classList.remove('show');
-      workspace.classList.remove('show');
-      progressBar.style.width = '0%';
-      statusPct.textContent = '0%';
-      resultBlob = null;
-      if (resultUrl) URL.revokeObjectURL(resultUrl);
-      if (sourceUrl) URL.revokeObjectURL(sourceUrl);
-      resultUrl = null; sourceUrl = null;
-      resultImg.removeAttribute('src'); originalImg.removeAttribute('src');
+    :root {
+      --paper: #f2eee7;
+      --paper-dark: #e7e0d5;
+      --ink: #161513;
+      --muted: #77716a;
+      --line: rgba(22, 21, 19, 0.14);
+      --white: #faf8f4;
+      --shadow: 0 30px 80px rgba(30, 26, 20, 0.13);
+      --radius: 28px;
+      --mono: "DM Mono", monospace;
+      --serif: "Playfair Display", Georgia, serif;
     }
 
-    function fmtBytes(bytes) {
-      if (bytes < 1024) return `${bytes} B`;
-      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(
+          circle at 20% 10%,
+          rgba(255, 255, 255, 0.72),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 90% 70%,
+          rgba(214, 203, 187, 0.35),
+          transparent 30%
+        ),
+        var(--paper);
+      font-family: var(--serif);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    /* ---------------------------------- */
+    /* Header */
+    /* ---------------------------------- */
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-name {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.06em;
+      font-weight: 600;
+    }
+
+    .brand-mark {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .privacy {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* ---------------------------------- */
+    /* Intro */
+    /* ---------------------------------- */
+
+    .hero {
+      max-width: 860px;
+      padding: 82px 0 60px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    h1 {
+      font-size: clamp(4rem, 9vw, 8.5rem);
+      line-height: 0.9;
+      letter-spacing: -0.075em;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    h1 em {
+      font-style: italic;
+    }
+
+    .hero-copy {
+      max-width: 570px;
+      margin: 28px 0 0;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      line-height: 1.45;
+      color: #4d4842;
+    }
+
+    /* ---------------------------------- */
+    /* Uploader */
+    /* ---------------------------------- */
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .dropzone {
+      position: relative;
+      min-height: 410px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(250, 248, 244, 0.54);
+      transition:
+        transform 220ms ease,
+        border-color 220ms ease,
+        background 220ms ease;
+      overflow: hidden;
+    }
+
+    .dropzone::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px dashed rgba(22, 21, 19, 0.16);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .dropzone.is-dragging {
+      transform: translateY(-3px);
+      border-color: rgba(22, 21, 19, 0.45);
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .dropzone-content {
+      min-height: 368px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 40px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tiny-number {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      margin-bottom: 18px;
+    }
+
+    .upload-title {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+    }
+
+    .upload-subtitle {
+      margin: 14px auto 28px;
+      max-width: 480px;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .upload-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .button {
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      padding: 13px 21px;
+      transition:
+        transform 180ms ease,
+        background 180ms ease,
+        color 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .button.secondary:hover {
+      background: rgba(22, 21, 19, 0.05);
+    }
+
+    .file-note {
+      margin-top: 24px;
+      font-family: var(--mono);
+      font-size: 0.61rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    /* ---------------------------------- */
+    /* Result */
+    /* ---------------------------------- */
+
+    .result {
+      display: none;
+    }
+
+    .result.visible {
+      display: block;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .result-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .result-title {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 500;
+      letter-spacing: -0.05em;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preview {
+      position: relative;
+      min-height: 480px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+
+      /* transparent PNG checkerboard */
+      background-color: #ebe6de;
+      background-image:
+        linear-gradient(45deg, #ded8ce 25%, transparent 25%),
+        linear-gradient(-45deg, #ded8ce 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ded8ce 75%),
+        linear-gradient(-45deg, transparent 75%, #ded8ce 75%);
+      background-size: 32px 32px;
+      background-position:
+        0 0,
+        0 16px,
+        16px -16px,
+        -16px 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .preview img {
+      max-width: min(85%, 850px);
+      max-height: 640px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 24px 28px rgba(22, 21, 19, 0.14));
+    }
+
+    /* ---------------------------------- */
+    /* Loading */
+    /* ---------------------------------- */
+
+    .loading {
+      display: none;
+      min-height: 480px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(250, 248, 244, 0.6);
+      padding: 50px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .loading.visible {
+      display: flex;
+    }
+
+    .loading-orbit {
+      width: 54px;
+      height: 54px;
+      border: 1px solid rgba(22, 21, 19, 0.18);
+      border-top-color: var(--ink);
+      border-radius: 50%;
+      animation: spin 900ms linear infinite;
+      margin-bottom: 25px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-title {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      font-weight: 500;
+      letter-spacing: -0.05em;
+    }
+
+    .loading-status {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .progress {
+      width: min(360px, 80vw);
+      height: 2px;
+      margin-top: 24px;
+      overflow: hidden;
+      background: rgba(22, 21, 19, 0.1);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--ink);
+      transition: width 140ms ease;
+    }
+
+    /* ---------------------------------- */
+    /* Footer */
+    /* ---------------------------------- */
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 34px;
+      margin-top: 70px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      line-height: 1.5;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    footer a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    /* ---------------------------------- */
+    /* Error */
+    /* ---------------------------------- */
+
+    .error {
+      display: none;
+      margin-top: 16px;
+      padding: 15px 17px;
+      border-radius: 14px;
+      background: rgba(160, 53, 53, 0.08);
+      border: 1px solid rgba(160, 53, 53, 0.2);
+      color: #743333;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      line-height: 1.5;
+    }
+
+    .error.visible {
+      display: block;
+    }
+
+    /* ---------------------------------- */
+    /* Responsive */
+    /* ---------------------------------- */
+
+    @media (max-width: 700px) {
+      .shell {
+        width: min(100% - 24px, 1180px);
+        padding-top: 16px;
+      }
+
+      header {
+        padding-bottom: 22px;
+      }
+
+      .privacy {
+        font-size: 0.56rem;
+      }
+
+      .hero {
+        padding: 58px 0 38px;
+      }
+
+      .dropzone,
+      .loading,
+      .preview {
+        min-height: 360px;
+      }
+
+      .dropzone-content,
+      .loading {
+        min-height: 320px;
+        padding: 30px 22px;
+      }
+
+      .preview img {
+        max-width: 92%;
+        max-height: 500px;
+      }
+
+      .result-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      footer {
+        flex-direction: column;
+        margin-top: 45px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <a href="#" class="brand">
+        <span class="brand-name">cutout.</span>
+        <span class="brand-mark">studio / 001</span>
+      </a>
+
+      <div class="privacy">
+        processed<br />
+        in-browser
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">background removal, quietly</div>
+
+        <h1>
+          keep the<br />
+          <em>good part.</em>
+        </h1>
+
+        <p class="hero-copy">
+          Drop a photo. Lose the background. Keep the subject.
+          No account, no upload queue, no nonsense.
+        </p>
+      </section>
+
+      <section class="workspace">
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-content">
+            <div class="tiny-number">01 / import</div>
+
+            <h2 class="upload-title">
+              Bring something into the studio.
+            </h2>
+
+            <p class="upload-subtitle">
+              JPG, PNG, WEBP or any image your browser can read.
+              Your original never needs to leave this page.
+            </p>
+
+            <div class="upload-actions">
+              <button class="button primary" id="chooseButton">
+                Choose image
+              </button>
+
+              <button class="button secondary" id="demoButton">
+                Drop it here
+              </button>
+            </div>
+
+            <div class="file-note">
+              best with a clear subject + decent contrast
+            </div>
+          </div>
+
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+          />
+        </div>
+
+        <div class="loading" id="loading">
+          <div class="loading-orbit"></div>
+
+          <h2 class="loading-title">
+            Cleaning the edges.
+          </h2>
+
+          <p class="loading-status" id="loadingStatus">
+            preparing the studio
+          </p>
+
+          <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+
+        <div class="result" id="result">
+          <div class="result-header">
+            <div>
+              <div class="result-label">02 / finished</div>
+              <h2 class="result-title">Much cleaner.</h2>
+            </div>
+
+            <div class="result-actions">
+              <button class="button primary" id="downloadButton">
+                Download PNG
+              </button>
+
+              <button class="button secondary" id="resetButton">
+                Start over
+              </button>
+            </div>
+          </div>
+
+          <div class="preview">
+            <img id="resultImage" alt="Background removed preview" />
+          </div>
+        </div>
+
+        <div class="error" id="error"></div>
+      </section>
+    </main>
+
+    <footer>
+      <div>
+        cutout. / private by default
+      </div>
+
+      <div>
+        powered by
+        <a
+          href="https://github.com/imgly/background-removal-js"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          IMG.LY
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    import removeBackground from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
+
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("fileInput");
+    const chooseButton = document.getElementById("chooseButton");
+    const demoButton = document.getElementById("demoButton");
+
+    const loading = document.getElementById("loading");
+    const loadingStatus = document.getElementById("loadingStatus");
+    const progressBar = document.getElementById("progressBar");
+
+    const result = document.getElementById("result");
+    const resultImage = document.getElementById("resultImage");
+
+    const downloadButton = document.getElementById("downloadButton");
+    const resetButton = document.getElementById("resetButton");
+    const errorBox = document.getElementById("error");
+
+    let resultUrl = null;
+    let currentFileName = "cutout";
+
+    chooseButton.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    /*
+      This is intentionally just a visual helper button.
+      Dragging is the primary alternative to the file picker.
+    */
+    demoButton.addEventListener("click", () => {
+      chooseButton.focus();
+      dropzone.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    });
+
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files?.[0];
+
+      if (file) {
+        processImage(file);
+      }
+    });
+
+    ["dragenter", "dragover"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        dropzone.classList.add("is-dragging");
+      });
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+      dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        dropzone.classList.remove("is-dragging");
+      });
+    });
+
+    dropzone.addEventListener("drop", (event) => {
+      const file = event.dataTransfer?.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        showError("That file doesn't look like an image.");
+        return;
+      }
+
+      processImage(file);
+    });
+
+    resetButton.addEventListener("click", resetApp);
+
+    downloadButton.addEventListener("click", () => {
+      if (!resultUrl) {
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = resultUrl;
+      link.download = `${currentFileName}-cutout.png`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    });
+
+    async function processImage(file) {
+      clearError();
+
+      currentFileName =
+        file.name
+          .replace(/\.[^/.]+$/, "")
+          .trim()
+          .replace(/[^a-z0-9-_]+/gi, "-") || "cutout";
+
+      dropzone.style.display = "none";
+      result.classList.remove("visible");
+
+      loading.classList.add("visible");
+      updateProgress(3, "warming up the studio");
+
+      try {
+        /*
+          IMG.LY processes the image in the browser.
+
+          device:
+            "cpu" is the safer default across browsers.
+
+          model:
+            "isnet_fp16" is a good quality/default option.
+
+          output:
+            PNG keeps the alpha channel, which is what we want
+            for a transparent cutout.
+        */
+        const outputBlob = await removeBackground(file, {
+          device: "cpu",
+          model: "isnet_fp16",
+          output: {
+            format: "image/png",
+            type: "foreground"
+          },
+
+          progress: (key, current, total) => {
+            if (!total) {
+              return;
+            }
+
+            const percent = Math.min(
+              98,
+              Math.max(5, Math.round((current / total) * 100))
+            );
+
+            updateProgress(
+              percent,
+              formatProgressLabel(key, percent)
+            );
+          }
+        });
+
+        updateProgress(100, "finished");
+
+        if (resultUrl) {
+          URL.revokeObjectURL(resultUrl);
+        }
+
+        resultUrl = URL.createObjectURL(outputBlob);
+        resultImage.src = resultUrl;
+
+        setTimeout(() => {
+          loading.classList.remove("visible");
+          result.classList.add("visible");
+
+          result.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }, 350);
+      } catch (error) {
+        console.error(error);
+
+        loading.classList.remove("visible");
+        dropzone.style.display = "";
+        showError(
+          "The cutout could not be created. Try another image or refresh the page."
+        );
+      }
+    }
+
+    function formatProgressLabel(key, percent) {
+      const normalized = String(key || "").toLowerCase();
+
+      if (normalized.includes("model")) {
+        return `loading model · ${percent}%`;
+      }
+
+      if (normalized.includes("wasm")) {
+        return `warming engine · ${percent}%`;
+      }
+
+      return `cutting subject · ${percent}%`;
+    }
+
+    function updateProgress(value, label) {
+      progressBar.style.width = `${value}%`;
+      loadingStatus.textContent = label;
+    }
+
+    function resetApp() {
+      if (resultUrl) {
+        URL.revokeObjectURL(resultUrl);
+        resultUrl = null;
+      }
+
+      resultImage.removeAttribute("src");
+
+      fileInput.value = "";
+
+      result.classList.remove("visible");
+      loading.classList.remove("visible");
+      dropzone.style.display = "";
+
+      updateProgress(0, "preparing the studio");
+      clearError();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     }
 
     function showError(message) {
       errorBox.textContent = message;
-      errorBox.classList.add('show');
-      status.classList.remove('show');
+      errorBox.classList.add("visible");
     }
 
-    async function processFile(file) {
-      if (!file || !file.type.startsWith('image/')) return showError('Please choose a PNG, JPG, or WebP image.');
-      resetUI();
-      sourceUrl = URL.createObjectURL(file);
-      originalImg.src = sourceUrl;
-      originalMeta.textContent = `${fmtBytes(file.size)} · ${file.type.replace('image/','').toUpperCase()}`;
-      workspace.classList.add('show');
-      status.classList.add('show');
-      statusText.textContent = 'Loading background-removal model…';
-      progressBar.style.width = '4%';
+    function clearError() {
+      errorBox.textContent = "";
+      errorBox.classList.remove("visible");
+    }
 
-      try {
-        const blob = await removeBackground(file, {
-          publicPath: MODEL_PATH,
-          progress: (key, current, total) => {
-            if (total > 0) {
-              const pct = Math.max(4, Math.min(99, Math.round((current / total) * 100)));
-              progressBar.style.width = `${pct}%`;
-              statusPct.textContent = `${pct}%`;
-              statusText.textContent = key?.toLowerCase().includes('model') ? 'Preparing AI model…' : 'Removing background…';
-            }
-          }
-        });
-        resultBlob = blob;
-        resultUrl = URL.createObjectURL(blob);
-        resultImg.src = resultUrl;
-        progressBar.style.width = '100%';
-        statusPct.textContent = '100%';
-        statusText.textContent = 'Done — your image is ready.';
-        setTimeout(() => status.classList.remove('show'), 900);
-      } catch (err) {
-        console.error(err);
-        showError('Background removal failed in this browser. Try a smaller image or another JPG/PNG/WebP file.');
+    window.addEventListener("beforeunload", () => {
+      if (resultUrl) {
+        URL.revokeObjectURL(resultUrl);
       }
-    }
-
-    fileInput.addEventListener('change', e => processFile(e.target.files?.[0]));
-    browseBtn.addEventListener('click', e => { e.preventDefault(); fileInput.click(); });
-    newBtn.addEventListener('click', () => { resetUI(); fileInput.value = ''; fileInput.click(); });
-    downloadBtn.addEventListener('click', () => {
-      if (!resultBlob) return;
-      const a = document.createElement('a');
-      a.href = resultUrl;
-      a.download = 'cutout-transparent.png';
-      document.body.appendChild(a); a.click(); a.remove();
     });
-
-    ['dragenter','dragover'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.add('drag'); }));
-    ['dragleave','drop'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
-    dropzone.addEventListener('drop', e => processFile(e.dataTransfer.files?.[0]));
-    dropzone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
   </script>
 </body>
 </html>
