@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free browser-based background remover. Drop an image, remove the background locally, and download a transparent PNG." />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>Cutout — Free Background Remover</title>
+  <link rel="preconnect" href="https://esm.sh" crossorigin>
+  <link rel="preconnect" href="https://staticimgly.com" crossorigin>
+  <style>
+    :root { color-scheme: dark; --bg:#090b10; --panel:#11151d; --panel2:#171c26; --text:#f4f7fb; --muted:#9aa4b2; --line:#273041; --accent:#8b5cf6; --accent2:#6d42e8; --good:#22c55e; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; min-height:100%; background:radial-gradient(1200px 600px at 50% -150px,#1b1530 0%,var(--bg) 55%); color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { display:flex; justify-content:center; }
+    .shell { width:min(1120px,100%); padding:28px 18px 42px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:28px; }
+    .brand { font-weight:800; letter-spacing:-.03em; font-size:20px; }
+    .privacy { color:var(--muted); font-size:13px; }
+    .hero { text-align:center; margin:36px auto 26px; max-width:720px; }
+    .hero h1 { margin:0; font-size:clamp(38px,6vw,64px); line-height:1; letter-spacing:-.05em; }
+    .hero p { color:var(--muted); margin:16px auto 0; font-size:17px; line-height:1.55; max-width:600px; }
+    .dropzone { border:1px dashed #3a465a; background:rgba(17,21,29,.86); border-radius:28px; padding:46px 20px; display:flex; flex-direction:column; align-items:center; gap:14px; transition:.2s ease; cursor:pointer; }
+    .dropzone:hover,.dropzone.drag { border-color:#9f7aea; background:rgba(23,18,38,.92); transform:translateY(-1px); }
+    .drop-icon { width:64px; height:64px; border-radius:18px; display:grid; place-items:center; background:linear-gradient(135deg,#8b5cf6,#5b21b6); box-shadow:0 12px 34px rgba(124,58,237,.24); }
+    .drop-icon svg { width:30px; height:30px; }
+    .dropzone strong { font-size:20px; }
+    .dropzone span { color:var(--muted); font-size:14px; }
+    .btn { border:0; border-radius:12px; padding:12px 18px; font-weight:700; cursor:pointer; color:white; background:linear-gradient(135deg,var(--accent),var(--accent2)); box-shadow:0 10px 25px rgba(109,66,232,.25); }
+    .btn:disabled { opacity:.5; cursor:not-allowed; box-shadow:none; }
+    .subtle { font-size:12px; color:#737e8f; }
+    input[type=file] { display:none; }
+    .status { margin:18px 0; display:none; }
+    .status.show { display:block; }
+    .progress { height:8px; background:#1b2230; border-radius:999px; overflow:hidden; border:1px solid #222a38; }
+    .progress > i { display:block; width:0%; height:100%; background:linear-gradient(90deg,#8b5cf6,#c084fc); transition:width .18s ease; }
+    .status-row { display:flex; justify-content:space-between; margin-bottom:10px; font-size:13px; color:var(--muted); }
+    .workspace { display:none; margin-top:24px; }
+    .workspace.show { display:block; }
+    .cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .card { background:rgba(17,21,29,.9); border:1px solid var(--line); border-radius:20px; padding:14px; }
+    .card header { display:flex; justify-content:space-between; align-items:center; padding:2px 2px 12px; }
+    .card header span { font-size:13px; color:var(--muted); }
+    .preview { min-height:420px; border-radius:14px; overflow:hidden; display:grid; place-items:center; background-color:#eef2f7; background-image:linear-gradient(45deg,#d8dee7 25%,transparent 25%),linear-gradient(-45deg,#d8dee7 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d8dee7 75%),linear-gradient(-45deg,transparent 75%,#d8dee7 75%); background-size:28px 28px; background-position:0 0,0 14px,14px -14px,-14px 0; }
+    .preview img { display:block; width:100%; height:auto; max-height:620px; object-fit:contain; }
+    .original .preview { background:#f5f7fa; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .btn.alt { background:#202734; box-shadow:none; border:1px solid #313c50; }
+    .btn.danger { background:#2a1c23; border:1px solid #4b2a35; box-shadow:none; }
+    .foot { text-align:center; color:#6f7989; font-size:12px; margin-top:28px; line-height:1.6; }
+    .error { color:#ffb4c0; background:#2b1820; border:1px solid #5b2a37; border-radius:14px; padding:12px 14px; font-size:13px; margin-top:16px; display:none; }
+    .error.show { display:block; }
+    @media (max-width:780px){ .cards{grid-template-columns:1fr;} .preview{min-height:300px;} .topbar{align-items:flex-start; flex-direction:column;} }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar"><div class="brand">CUTOUT</div><div class="privacy">Private by design · runs in your browser</div></div>
+
+    <section class="hero">
+      <h1>Remove backgrounds.<br>Keep the subject.</h1>
+      <p>Drop in an image and get a clean transparent PNG. No account, no upload queue, and no server-side image processing.</p>
+    </section>
+
+    <label class="dropzone" id="dropzone" for="fileInput" tabindex="0">
+      <div class="drop-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M5 12v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+      </div>
+      <strong>Drop an image here</strong>
+      <span>or click to browse · JPG, PNG, WebP</span>
+      <button class="btn" id="browseBtn" type="button">Choose image</button>
+      <div class="subtle">The first image may take a little longer while the AI model loads.</div>
+    </label>
+    <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" />
+
+    <section class="status" id="status" aria-live="polite">
+      <div class="status-row"><span id="statusText">Preparing…</span><span id="statusPct">0%</span></div>
+      <div class="progress"><i id="progressBar"></i></div>
+    </section>
+    <div class="error" id="error"></div>
+
+    <section class="workspace" id="workspace">
+      <div class="cards">
+        <article class="card original"><header><strong>Original</strong><span id="originalMeta"></span></header><div class="preview"><img id="originalImg" alt="Original image preview"></div></article>
+        <article class="card"><header><strong>Transparent</strong><span>PNG output</span></header><div class="preview"><img id="resultImg" alt="Transparent image preview"></div></article>
+      </div>
+      <div class="actions">
+        <button class="btn" id="downloadBtn">Download transparent PNG</button>
+        <button class="btn alt" id="newBtn">Choose another image</button>
+      </div>
+    </section>
+
+    <div class="foot">Built with <a href="https://github.com/imgly/background-removal-js" target="_blank" rel="noreferrer" style="color:#bda5ff">@imgly/background-removal</a>. Image processing happens locally in your browser.</div>
+  </main>
+
+  <script type="module">
+    import removeBackground from 'https://esm.sh/@imgly/background-removal@1.7.0?bundle';
+
+    const MODEL_PATH = 'https://staticimgly.com/@imgly/background-removal-data/1.7.0/';
+    const fileInput = document.querySelector('#fileInput');
+    const dropzone = document.querySelector('#dropzone');
+    const browseBtn = document.querySelector('#browseBtn');
+    const status = document.querySelector('#status');
+    const statusText = document.querySelector('#statusText');
+    const statusPct = document.querySelector('#statusPct');
+    const progressBar = document.querySelector('#progressBar');
+    const errorBox = document.querySelector('#error');
+    const workspace = document.querySelector('#workspace');
+    const originalImg = document.querySelector('#originalImg');
+    const resultImg = document.querySelector('#resultImg');
+    const originalMeta = document.querySelector('#originalMeta');
+    const downloadBtn = document.querySelector('#downloadBtn');
+    const newBtn = document.querySelector('#newBtn');
+
+    let resultBlob = null;
+    let resultUrl = null;
+    let sourceUrl = null;
+
+    function resetUI() {
+      errorBox.classList.remove('show');
+      status.classList.remove('show');
+      workspace.classList.remove('show');
+      progressBar.style.width = '0%';
+      statusPct.textContent = '0%';
+      resultBlob = null;
+      if (resultUrl) URL.revokeObjectURL(resultUrl);
+      if (sourceUrl) URL.revokeObjectURL(sourceUrl);
+      resultUrl = null; sourceUrl = null;
+      resultImg.removeAttribute('src'); originalImg.removeAttribute('src');
+    }
+
+    function fmtBytes(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.add('show');
+      status.classList.remove('show');
+    }
+
+    async function processFile(file) {
+      if (!file || !file.type.startsWith('image/')) return showError('Please choose a PNG, JPG, or WebP image.');
+      resetUI();
+      sourceUrl = URL.createObjectURL(file);
+      originalImg.src = sourceUrl;
+      originalMeta.textContent = `${fmtBytes(file.size)} · ${file.type.replace('image/','').toUpperCase()}`;
+      workspace.classList.add('show');
+      status.classList.add('show');
+      statusText.textContent = 'Loading background-removal model…';
+      progressBar.style.width = '4%';
+
+      try {
+        const blob = await removeBackground(file, {
+          publicPath: MODEL_PATH,
+          progress: (key, current, total) => {
+            if (total > 0) {
+              const pct = Math.max(4, Math.min(99, Math.round((current / total) * 100)));
+              progressBar.style.width = `${pct}%`;
+              statusPct.textContent = `${pct}%`;
+              statusText.textContent = key?.toLowerCase().includes('model') ? 'Preparing AI model…' : 'Removing background…';
+            }
+          }
+        });
+        resultBlob = blob;
+        resultUrl = URL.createObjectURL(blob);
+        resultImg.src = resultUrl;
+        progressBar.style.width = '100%';
+        statusPct.textContent = '100%';
+        statusText.textContent = 'Done — your image is ready.';
+        setTimeout(() => status.classList.remove('show'), 900);
+      } catch (err) {
+        console.error(err);
+        showError('Background removal failed in this browser. Try a smaller image or another JPG/PNG/WebP file.');
+      }
+    }
+
+    fileInput.addEventListener('change', e => processFile(e.target.files?.[0]));
+    browseBtn.addEventListener('click', e => { e.preventDefault(); fileInput.click(); });
+    newBtn.addEventListener('click', () => { resetUI(); fileInput.value = ''; fileInput.click(); });
+    downloadBtn.addEventListener('click', () => {
+      if (!resultBlob) return;
+      const a = document.createElement('a');
+      a.href = resultUrl;
+      a.download = 'cutout-transparent.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    });
+
+    ['dragenter','dragover'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.add('drag'); }));
+    ['dragleave','drop'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
+    dropzone.addEventListener('drop', e => processFile(e.dataTransfer.files?.[0]));
+    dropzone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+  </script>
+</body>
+</html>
